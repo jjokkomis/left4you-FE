@@ -1,5 +1,5 @@
 "use client";
-import Main from "@/containers/ui/main/main";
+import Main from "@/containers/ui/home/home";
 
 export default function HomePage() {
   return (

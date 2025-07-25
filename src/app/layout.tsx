@@ -8,7 +8,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body style={{margin: 0, padding: 0}}>
         <Wrapper>
           {children}
           <Nav>네브바</Nav>
@@ -25,6 +25,7 @@ const Wrapper = styled.div`
   align-items: center;
   width: 100%;
   max-width: 400px;
+  max-height: 100vh;
   margin: 0 auto;
   row-gap: 4rem;
 `;
