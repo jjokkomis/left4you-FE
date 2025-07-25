@@ -1,4 +1,5 @@
 "use client";
+import GlobalStyle from "@/styles/GlobalStyle";
 import styled from "@emotion/styled";
 
 export default function RootLayout({
@@ -8,7 +9,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body style={{margin: 0, padding: 0}}>
+      <GlobalStyle />
+      <body>
         <Wrapper>
           {children}
           <Nav>네브바</Nav>
