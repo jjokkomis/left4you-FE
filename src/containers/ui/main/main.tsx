@@ -1,11 +1,12 @@
 "use client";
 import styled from "@emotion/styled";
+import Recommand from "@/components/ui/recommand/recommand";
 
 export default function Main() {
     return (
         <Container>
             <Title>추천기능</Title>
-            <Box />
+            <Recommand />
             <Title>이런 기능도 있어요</Title>
             <Box />
         </Container>
