@@ -4,8 +4,6 @@ export const Wrapper = styled.div`
     display: flex;
     gap: 1rem;
     overflow-x: auto;
-    padding-bottom: 1rem;
-    margin-bottom: 4rem;
     scroll-behavior: smooth;
 
     &::-webkit-scrollbar {

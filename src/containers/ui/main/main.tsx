@@ -1,6 +1,7 @@
 "use client";
 import styled from "@emotion/styled";
 import Recommand from "@/components/ui/recommand/recommand";
+import Various from "@/components/ui/various/various";
 
 export default function Main() {
     return (
@@ -8,7 +9,7 @@ export default function Main() {
             <Title>추천기능</Title>
             <Recommand />
             <Title>이런 기능도 있어요</Title>
-            <Box />
+            <Various />
         </Container>
     );
 }
@@ -24,13 +25,4 @@ const Container = styled.div`
 
 const Title = styled.h2`
     color: #1d1d1d;
-`;
-
-const Box = styled.div`
-    height: 20vh;
-    width: 100%;
-    padding: 2rem 3rem;
-    border-radius: 0.25rem;
-    background-color: #464646;
-    box-sizing: border-box;
 `;
