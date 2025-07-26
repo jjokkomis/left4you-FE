@@ -1,6 +1,9 @@
 "use client";
 import GlobalStyle from "@/styles/GlobalStyle";
 import styled from "@emotion/styled";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 export default function RootLayout({
   children,
@@ -9,13 +12,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <GlobalStyle />
-      <body>
-        <Wrapper>
-          {children}
-          <Nav>네브바</Nav>
-        </Wrapper>
-      </body>
+      <QueryClientProvider client={queryClient}>
+        <GlobalStyle />
+        <body>
+          <Wrapper>
+            {children}
+            <Nav>네브바</Nav>
+          </Wrapper>
+        </body>
+      </QueryClientProvider>
     </html>
   );
 }
