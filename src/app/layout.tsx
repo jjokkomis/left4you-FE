@@ -28,6 +28,7 @@ const Wrapper = styled.div`
   width: 100%;
   max-width: 400px;
   max-height: 100vh;
+  padding: 0.5rem 0.2rem;
   margin: 0 auto;
   row-gap: 4rem;
 `;
