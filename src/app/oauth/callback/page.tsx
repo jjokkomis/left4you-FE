@@ -3,14 +3,12 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useKakaoLogin } from "@/hooks/useAuth";
-import { useUserStore } from "@/store/useUserStore";
 
 export default function OAuthCallbackPage() {
   const params = useSearchParams();
   const code = params.get("code") ?? "";
 
   const { mutate, status, error } = useKakaoLogin();
-  const setUser = useUserStore((s) => s.setUser);
   const [localError, setLocalError] = useState<string | null>(null);
 
   useEffect(() => {
