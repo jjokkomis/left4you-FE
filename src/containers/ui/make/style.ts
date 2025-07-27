@@ -23,7 +23,7 @@ export const CourseName = styled.textarea`
     width: 100%;
     border: 0.1rem solid #EDEDED;
     border-radius: 0.25rem;
-    padding: 1rem 0 0 1rem;
+    padding: 1rem 1rem 0 1rem;
     font-size: 1rem;
     resize: none;
     font-family: 'MiraeroNormal';
