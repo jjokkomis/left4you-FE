@@ -16,12 +16,6 @@ export default function OAuthCallbackPage() {
   useEffect(() => {
     if (!code) return;
     mutate(code, {
-      onSuccess(data) {
-        setUser(data.user);
-        localStorage.setItem("token", data.access_token);
-        localStorage.setItem("user", JSON.stringify(data.user));
-        window.location.replace("/");
-      },
       onError(err: Error) {
         setLocalError(err.message);
       },
