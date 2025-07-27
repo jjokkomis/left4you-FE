@@ -89,7 +89,7 @@ export const Footer = styled.div`
   position: sticky;
   bottom: 0;
   background: #fff;
-  padding-bottom: 100%;
+  padding-bottom: 70%;
   display: flex;
   flex-direction: column;
   align-items: center;
