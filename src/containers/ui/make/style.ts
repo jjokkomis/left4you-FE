@@ -3,7 +3,6 @@ import styled from "@emotion/styled";
 export const Container = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 1rem;
     row-gap: 2rem;
     width: 100%;
     max-width: 400px;
@@ -28,7 +27,7 @@ export const CourseName = styled.textarea`
     resize: none;
     font-family: 'MiraeroNormal';
 
-    ::placeholder {
+    &::placeholder {
         color: #B2B2B2;
     }
 
@@ -56,5 +55,4 @@ export const Course = styled.div`
     border-radius: 0.25rem;
     padding: 0.8rem;
     font-size: 1rem;
-    resize: none;
 `;

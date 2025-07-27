@@ -28,6 +28,5 @@ const Button = styled.button`
     color: #fff;
     border-radius: 0.25rem;
     font-size: 1rem;
-    font-family: "MiraeroNormal";
     cursor: pointer;
 `;
