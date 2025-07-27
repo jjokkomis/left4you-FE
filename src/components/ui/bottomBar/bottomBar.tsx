@@ -16,7 +16,7 @@ const Wrapper = styled.div`
 export default function BottomBar() {
   const path = usePathname();
 
-  if (path === "/login" || path === "/register" || path.startsWith("/oauth/callback")) {
+  if (path === "/login" || path === "/survey" || path.startsWith("/oauth/callback")) {
     return null;
   }
 

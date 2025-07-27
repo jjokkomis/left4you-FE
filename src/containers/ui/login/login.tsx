@@ -16,11 +16,7 @@ export default function LoginContainer() {
     }, 500);
     return () => clearTimeout(timer);
   }, []);
-
-  const handleRegisterClick = () => {
-    router.push("/register");
-  }
-
+  
   return (
     <S.Container>
       <S.SlideBox active={showLogin}>
@@ -46,10 +42,10 @@ export default function LoginContainer() {
             <br />
             로그인하기
           </S.Title>
-          <S.Subtitle>
+          {/* <S.Subtitle>
             아직 회원이 아니신가요?{" "}
             <S.RegisterText onClick={handleRegisterClick}>회원가입하기</S.RegisterText>
-          </S.Subtitle>
+          </S.Subtitle> */}
           <S.KakaoButton href={kakaoLoginUrl}>
             <Image
               src="/assets/kakao-chat.svg"
