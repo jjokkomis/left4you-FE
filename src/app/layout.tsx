@@ -1,4 +1,5 @@
 "use client";
+import BottomBar from "@/components/ui/bottomBar/bottomBar";
 import GlobalStyle from "@/styles/GlobalStyle";
 import styled from "@emotion/styled";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
@@ -17,7 +18,7 @@ export default function RootLayout({
         <body>
           <Wrapper>
             {children}
-            <Nav>네브바</Nav>
+            <BottomBar />
           </Wrapper>
         </body>
       </QueryClientProvider>
