@@ -20,6 +20,15 @@ const GlobalStyle = () => (
       body {
         font-family: "MiraeroNormal", sans-serif;
       }
+
+      #nprogress .bar {
+        background: #364155 !important;
+        height: 3px !important;
+      }
+
+      #nprogress .peg {
+        box-shadow: 0 0 10px rgba(54, 65, 85, 0.6), 0 0 5px rgba(54, 65, 85, 0.6) !important;
+      }
     
     `}
   />
