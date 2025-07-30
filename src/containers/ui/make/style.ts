@@ -56,3 +56,26 @@ export const Course = styled.div`
     padding: 0.8rem;
     font-size: 1rem;
 `;
+
+export const Pack = styled.div`
+    display: flex;
+    justify-content: space-between;
+`;
+
+export const Name = styled.div`
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    color: #B2B2B2;
+`;
+
+export const PreviewTitle = styled.div`
+    display: flex;
+    margin-top: 1rem;
+    font-size: 1.2rem;
+    display: flex;
+`;
+
+export const Star = styled.div`
+    font-size: 0.75rem;
+`;
