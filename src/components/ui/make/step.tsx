@@ -1,37 +1,21 @@
-import { useRouter } from 'next/navigation';
-import React, { useState } from "react";
+import React from "react";
 import styled from "@emotion/styled";
 import Image from "next/image";
 
-export default function Step() {
-    const [number, setNumber] = useState(1);
-    const router = useRouter();
+interface StepProps {
+    currentStep: number;
+    onNext: () => void;
+    onPrev: () => void;
+}
 
-    const handleBefore = () => {
-        if (number > 1) {
-            setNumber(prev => prev - 1);
-        } else {
-            router.push('/');
-        }
-    };
-
-    const handleNext = () => {
-        if (number < 3) {
-            setNumber(prev => prev + 1);
-        } else {
-            router.push('/'); // 다음 페이지로 이동
-        }
-    };
-
+export default function Step({ currentStep, onNext, onPrev }: StepProps) {
     return (
         <Wrapper>
-            <Btn onClick={handleBefore}>
-                <Image src="/assets/Larrow.svg" alt="arrow" width={10} height={10} />
-                이전
+            <Btn onClick={onPrev}>
+                <Image src="/assets/Larrow.svg" alt="arrow" width={10} height={10} /> 이전 
             </Btn>
-            <h2>STEP {number}/3</h2>
-            <Btn onClick={handleNext}>
-                다음
+            <h2>STEP {currentStep}/3</h2>
+            <Btn onClick={onNext}> 다음
                 <Image src="/assets/Barrow.svg" alt="arrow" width={10} height={10} />
             </Btn>
         </Wrapper>
