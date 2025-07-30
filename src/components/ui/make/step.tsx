@@ -1,12 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
+import type { StepProps } from "./type";
 import Image from "next/image";
-
-interface StepProps {
-    currentStep: number;
-    onNext: () => void;
-    onPrev: () => void;
-}
 
 export default function Step({ currentStep, onNext, onPrev }: StepProps) {
     return (
