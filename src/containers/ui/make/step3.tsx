@@ -10,7 +10,7 @@ export default function Step2() {
             <S.Map />
             <S.Wrapper>
                 <S.Title> 코스 이름 </S.Title>
-                <S.CourseName>한강 나들이</S.CourseName>
+                <S.Box>한강 나들이</S.Box>
             </S.Wrapper>
             <S.BtnGap>
                 <Btn>생성완료</Btn>

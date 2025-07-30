@@ -36,6 +36,16 @@ export const CourseName = styled.textarea`
     }
 `;
 
+export const Box = styled.div`
+    width: 100%;
+    border: 0.1rem solid #EDEDED;
+    border-radius: 0.25rem;
+    padding: 1rem;
+    font-size: 1rem;
+    resize: none;
+    font-family: 'MiraeroNormal';
+`;
+
 export const Map = styled.div`
     width: 100%;
     height: 30vh;
