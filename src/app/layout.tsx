@@ -40,13 +40,3 @@ const Wrapper = styled.div`
   margin: 0 auto;
   row-gap: 4rem;
 `;
-
-const Nav = styled.div`
-  height: 5rem;
-  width: 100%;
-  background-color: #364155;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-`;
