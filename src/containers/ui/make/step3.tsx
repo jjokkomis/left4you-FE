@@ -1,4 +1,5 @@
 import * as S from './style';
+import Btn from '@/components/ui/button/button';
 
 export default function Step2() {
     return (
@@ -11,6 +12,9 @@ export default function Step2() {
                 <S.Title> 코스 이름 </S.Title>
                 <S.CourseName>한강 나들이</S.CourseName>
             </S.Wrapper>
+            <S.BtnGap>
+                <Btn>생성완료</Btn>
+            </S.BtnGap>
         </S.Container>
     );
 }

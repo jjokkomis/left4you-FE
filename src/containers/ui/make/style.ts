@@ -79,3 +79,7 @@ export const PreviewTitle = styled.div`
 export const Star = styled.div`
     font-size: 0.75rem;
 `;
+
+export const BtnGap = styled.div`
+    margin-top: 3rem;
+`;
