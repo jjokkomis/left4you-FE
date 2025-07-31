@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import * as S from './style';
 import Step from "@/components/ui/make/step";
-import Step1 from './step1';
-import Step2 from './step2';
-import Step3 from './step3';
+import Step1 from './steps/step1';
+import Step2 from './steps/step2';
+import Step3 from './steps/step3';
 
 export default function Make() {
     const [step, setStep] = useState(1);

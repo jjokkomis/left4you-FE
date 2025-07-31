@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-import type { StepProps } from "./type";
+import type  { StepProps } from "@/types/types"
 import Image from "next/image";
 
 export default function Step({ currentStep, onNext, onPrev }: StepProps) {

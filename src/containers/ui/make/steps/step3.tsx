@@ -1,4 +1,4 @@
-import * as S from './style';
+import * as S from '../style';
 import Btn from '@/components/ui/button/button';
 
 export default function Step2() {
