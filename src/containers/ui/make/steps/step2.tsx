@@ -1,4 +1,5 @@
 import * as S from '../style';
+import KakaoMap from '@/components/layout/map/kakaoMap';
 
 export default function Step2() {
     return (
@@ -11,9 +12,7 @@ export default function Step2() {
                 </S.Pack>
                 <S.Star> 4.0 ★★★★☆ </S.Star>
             </S.Wrapper>
-
-            <S.Map />
-
+            <KakaoMap />
             <S.Group>
                 <S.Course>한강 공원</S.Course>
                 <S.Course>롯데월드타워</S.Course>
