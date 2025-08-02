@@ -8,10 +8,13 @@ const KakaoMap = () => {
     useEffect(() => {
         if (!mapRef.current) return;
 
+        // 카카오맵 생성 및 로드
         if (!(window as any).kakao) {
         const script = document.createElement('script');
         script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_APP_JS_KEY}&autoload=false`;
         script.async = true;
+
+        // 로드 완료 후 지도 초기화
         script.onload = () => {
             (window as any).kakao.maps.load(() => {
             const container = mapRef.current!;
@@ -39,6 +42,7 @@ const KakaoMap = () => {
             };
             const map = new (window as any).kakao.maps.Map(container, options);
 
+            // 마커 생성 및 지도에 표시
             const markerPosition = new (window as any).kakao.maps.LatLng(33.450701, 126.570667);
             const marker = new (window as any).kakao.maps.Marker({
             position: markerPosition,
