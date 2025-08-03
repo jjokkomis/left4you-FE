@@ -1,13 +1,10 @@
 import styled from "@emotion/styled";
+import type { BtnProps } from "@/types/types";
 
-interface Props {
-    children: React.ReactNode;
-}
-
-export default function Btn({ children }: Props) {
+export default function Btn({ children, onClick }: BtnProps) {
     return (
         <Container>
-        <Button>{children}</Button>
+            <Button onClick={onClick}>{children}</Button>
         </Container>
     );
 }
