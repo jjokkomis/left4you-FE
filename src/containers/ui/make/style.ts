@@ -46,12 +46,6 @@ export const Box = styled.div`
     font-family: 'MiraeroNormal';
 `;
 
-export const Map = styled.div`
-    width: 100%;
-    height: 30vh;
-    background-color: #ddd;
-`;
-
 export const Group = styled.div`
     display: flex;
     flex-direction: column;
@@ -65,6 +59,12 @@ export const Course = styled.div`
     border-radius: 0.25rem;
     padding: 0.8rem;
     font-size: 1rem;
+    resize: none;
+    font-family: 'MiraeroNormal';
+
+    &:focus {
+        outline: none;
+    }
 `;
 
 export const Pack = styled.div`
@@ -86,10 +86,55 @@ export const PreviewTitle = styled.div`
     display: flex;
 `;
 
-export const Star = styled.div`
-    font-size: 0.75rem;
-`;
-
 export const BtnGap = styled.div`
     margin-top: 3rem;
+`;
+
+export const Map = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start; 
+    padding-left: 10%;
+    height: 20vh;
+    margin: 1rem 0;
+    border-radius: 0.25rem;
+    background: rgba(0, 0, 0, 0.5);
+    background-size: cover;
+`;
+
+export const Overlay = styled.div`
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    row-gap: 0.2rem;
+`;
+
+export const CourseTitle = styled.div`
+    font-size: 1.8rem;
+    font-weight: bold;
+`;
+
+export const Location = styled.div`
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+`;
+
+export const Message = styled.div`
+    font-size: 1rem;
+    color: #D5D5D5;
+`;
+
+export const MessageInput = styled.textarea`
+    display: flex;
+    align-items: center;
+    border: 0.1rem solid #EDEDED;
+    border-radius: 0.25rem;
+    padding: 0.8rem;
+    font-size: 1rem;
+    resize: none;
+
+    &:focus {
+        outline: none;
+    }
 `;
