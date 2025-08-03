@@ -77,7 +77,7 @@ export default function Step1() {
 
         const { error } = await supabase.from("course_make").insert([data]);
         if (error) {
-            alert("저장 실패: " + error.message);
+            alert(error.message);
         } else {
             alert("코스 위치가 성공적으로 저장되었습니다.");
         }

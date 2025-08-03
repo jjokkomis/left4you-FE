@@ -25,7 +25,7 @@ export default function Step2() {
                     .single();
 
                 if (error || !data) {
-                    console.error("불러오기 실패:", error);
+                    console.error( error);
                     return;
                 }
 
@@ -38,9 +38,9 @@ export default function Step2() {
                     });
                 }
 
-                setCourseName(data.name || "");
+                setCourseName(data.name || "코스 이름 없음");
                 setAuthor(data.maker_id || "익명");
-            } catch (e) { console.error("content 파싱 오류:", e); }};
+            } catch (e) { console.error( e); } };
         fetchCourseData();
     }, []);
 
@@ -53,15 +53,12 @@ export default function Step2() {
                     <S.Name>{author}</S.Name>
                 </S.Pack>
             </S.Wrapper>
-            <KakaoMap
-                center={locations.A.coord ?? undefined}
-                onSelectLocation={() => {}}
-            />
+            <KakaoMap center={locations.A.coord ?? undefined} onSelectLocation={() => {}} />
             <S.Group>
                 {Object.entries(locations).map(([key, location]) => (
                     <S.Course key={key}>
                         {location.address} (
-                        {location.coord
+                        {location.coord && typeof location.coord.lat === "number" && typeof location.coord.lng === "number"
                             ? `${location.coord.lat.toFixed(4)}, ${location.coord.lng.toFixed(4)}`
                             : "좌표 없음"}
                         )
