@@ -105,6 +105,7 @@ export const Map = styled.div`
 
 export const Overlay = styled.div`
     display: flex;
+    width: 90%;
     flex-direction: column;
     color: #fff;
     row-gap: 0.2rem;
@@ -112,7 +113,6 @@ export const Overlay = styled.div`
 
 export const CourseTitle = styled.div`
     font-size: 1.8rem;
-    font-weight: bold;
 `;
 
 export const Location = styled.div`
@@ -133,6 +133,7 @@ export const MessageInput = styled.textarea`
     padding: 0.8rem;
     font-size: 1rem;
     resize: none;
+    font-family: 'MiraeroNormal';
 
     &:focus {
         outline: none;
