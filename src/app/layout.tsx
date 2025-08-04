@@ -4,6 +4,7 @@ import NProgressProvider from "@/components/ui/nProgress/NProgressProvider";
 import GlobalStyle from "@/styles/GlobalStyle";
 import styled from "@emotion/styled";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import AuthGuard from "@/components/layout/AuthGuard";
 
 const queryClient = new QueryClient();
 
@@ -17,11 +18,13 @@ export default function RootLayout({
       <QueryClientProvider client={queryClient}>
         <GlobalStyle />
         <body>
-          <Wrapper id="layoutContainer">
-            <NProgressProvider />
-            {children}
-            <BottomBar />
-          </Wrapper>
+          <AuthGuard>
+            <Wrapper id="layoutContainer">
+              <NProgressProvider />
+              {children}
+              <BottomBar />
+            </Wrapper>
+          </AuthGuard>
         </body>
       </QueryClientProvider>
     </html>
