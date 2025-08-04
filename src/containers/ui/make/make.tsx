@@ -1,24 +1,31 @@
 "use client";
+
+import { useState } from 'react';
 import * as S from './style';
 import Step from "@/components/ui/make/step";
-import Btn from '@/components/ui/button/button';
-import Image from "next/image";
+import Step1 from './steps/step1';
+import Step2 from './steps/step2';
+import Step3 from './steps/step3';
 
-export default function Makepage() {
+export default function Make() {
+    const [step, setStep] = useState(1);
+
+    const nextStep = () => {
+        if (step < 3) setStep(step + 1);
+    };
+
+    const beforeStep = () => {
+        if (step > 1) setStep(step - 1);
+    };
+
     return (
         <S.Container>
-            <Step />
-            <S.Wrapper>
-                <S.Title>코스 이름</S.Title>
-                <S.CourseName placeholder="코스 이름을 입력해주세요" />
-            </S.Wrapper>
-            <S.Map />
-            <h4> <Image src="/assets/Barrow.svg" alt="arrow" width={10} height={10} /> 서울 강남구 역삼동 823-23 </h4>
-            <S.Group>
-                <S.Course>한강 공원</S.Course>
-                <S.Course>롯데월드타워</S.Course>
-            </S.Group>
-            <Btn>위치등록</Btn>
+            <Step currentStep={step} onNext={nextStep} onPrev={beforeStep} />
+
+            {step === 1 && <Step1 />}
+            {step === 2 && <Step2 />}
+            {step === 3 && <Step3 />}
+
         </S.Container>
     );
 }
