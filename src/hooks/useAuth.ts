@@ -18,7 +18,7 @@ export function useKakaoLogin(): UseMutationResult<AuthResponse, Error, string> 
       
       const { data: surveyData } = await surveyResult.refetch();
 
-      router.push(surveyData.count === 0 ? "/survey" : "/");
+      router.push(surveyData?.count === 0 ? "/survey" : "/");
     },
     onError(err: Error) {
       console.error("Kakao login error", err);

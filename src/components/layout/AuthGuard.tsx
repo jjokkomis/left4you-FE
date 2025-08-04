@@ -4,11 +4,8 @@ import { useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { jwtDecode } from 'jwt-decode';
 
-interface JwtPayload {
-    iat: number;
-    exp: number;
-    user_id: number;
-}
+
+import { JwtPayload } from '@/types/auth';
 
 export default function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
