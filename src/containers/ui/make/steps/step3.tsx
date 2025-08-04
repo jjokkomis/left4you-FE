@@ -1,51 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import * as S from "../style";
 import Btn from "@/components/ui/button/button";
-import { supabase } from "@/lib/supabaseClient";
-import type { CourseData } from "@/types/types";
+import { useCourseCard } from "@/hooks/make/useCourseCard";
 
 export default function Step3() {
-    const [course, setCourse] = useState<CourseData | null>(null);
-    const [message, setMessage] = useState("");
+    const { course, message, loading, error, start, end, setMessage, saveMessage } = useCourseCard();
 
-    useEffect(() => {
-        const fetchLastCourse = async () => {
-            const { data, error } = await supabase
-                .from("course_make")
-                .select("*")
-                .order("created_at", { ascending: false })
-                .limit(1);
-
-            if (error) console.error(error.message);
-            else if (data && data.length > 0) {
-                setCourse(data[0]);
-                setMessage(data[0].message || ""); 
-            }
-        };
-
-        fetchLastCourse();
-    }, []);
-
-    const parsedLocations = course?.content
-        ? JSON.parse(course.content)?.locations
-        : null;
-
-    const start = parsedLocations?.[0];
-    const end = parsedLocations?.[1];
-
-    const handleSaveMessage = async () => {
-        if (!course) return;
-
-        const { error } = await supabase
-            .from("course_make")
-            .update({ message })
-            .eq("id", course.id);
-
-        if (error) alert(error.message);
-        else alert("메시지가 성공적으로 저장되었습니다.");
-    };
+    if (loading) return <S.Loading>로딩 중...</S.Loading>;
+    if (error) return <S.Loading>에러 발생: {error}</S.Loading>;
 
     return (
         <S.Container>
@@ -77,7 +40,7 @@ export default function Step3() {
                 />
             </S.Wrapper>
             <S.BtnGap>
-                <Btn onClick={handleSaveMessage}>생성완료</Btn>
+                <Btn onClick={saveMessage}>생성완료</Btn>
             </S.BtnGap>
         </S.Container>
     );
