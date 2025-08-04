@@ -120,6 +120,12 @@ export const Location = styled.div`
     margin: 0.5rem 0;
 `;
 
+export const MyLocationGroup = styled.h4`
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+`;
+
 export const Message = styled.div`
     font-size: 1rem;
     color: #D5D5D5;
@@ -138,4 +144,10 @@ export const MessageInput = styled.textarea`
     &:focus {
         outline: none;
     }
+`;
+
+export const Loading = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
