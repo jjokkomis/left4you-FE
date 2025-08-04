@@ -4,8 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import * as S from './style';
 import Image from "next/image";
+import { useCreateSurvey } from "@/hooks/useSurvey";
+import { SurveySubmission } from "@/types/survey";
+import type { Screen } from '@/types/survey';
 
-const SCREENS = [
+const SCREENS: readonly Screen[] = [
   {
     key: "emotion",
     icon: "/assets/icons/leaf.svg",
@@ -77,12 +80,21 @@ const SCREENS = [
       { value: "JEJU", label: "제주도" },
     ],
   },
-];
+] as const;
+
+const initialAnswers: SurveySubmission = {
+  city: "",
+  emotion: "",
+  theme: "",
+  time: "",
+  walk_type: "",
+}
 
 export default function SurveyContainer() {
   const router = useRouter();
   const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [answers, setAnswers] = useState(initialAnswers);
+  const { mutate: createSurvey } = useCreateSurvey();
 
   const screen = SCREENS[step];
 
@@ -98,8 +110,7 @@ export default function SurveyContainer() {
     if (step < SCREENS.length - 1) {
       setStep(step + 1);
     } else {
-      console.log("submit", answers);
-      router.push("/");
+      createSurvey(answers);
     }
   };
 

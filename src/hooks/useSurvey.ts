@@ -1,6 +1,7 @@
-import { getSurvey } from "@/services/survey";
-import { UseQueryResult, useQuery } from "@tanstack/react-query";
-import { Survey } from "@/services/survey";
+import { createSurvey, getSurvey } from "@/services/survey";
+import { UseQueryResult, UseMutationResult, useMutation, useQuery } from "@tanstack/react-query";
+import { Survey, SurveySubmission } from "@/types/survey";
+import { useRouter } from "next/navigation";
 
 export function useGetSurvey(): UseQueryResult<Survey, Error> {
     return useQuery<Survey, Error>({
@@ -11,4 +12,18 @@ export function useGetSurvey(): UseQueryResult<Survey, Error> {
         },
         enabled: false,
     })
+}
+
+export function useCreateSurvey(): UseMutationResult<void, Error, SurveySubmission> {
+    const router = useRouter();
+
+    return useMutation<void, Error, SurveySubmission>({
+        mutationFn: (data) => createSurvey(data),
+        onSuccess: () => {
+            router.replace("/");
+        },
+        onError: (error) => {
+            console.error("설문 저장 실패:", error);
+        }
+    });
 }
