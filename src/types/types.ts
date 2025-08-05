@@ -24,6 +24,7 @@ export interface BtnProps {
     onClick?: () => void;
 }
 
+// course.ts
 interface Coordinates {
     lat: number;
     lng: number;
@@ -34,7 +35,7 @@ interface Content {
     coordB: Coordinates;
 }
 
-export interface CreateCourseRequest {
+export interface CreateCourse {
     maker_id: string;
     name: string;
     content: Content;  
@@ -42,40 +43,40 @@ export interface CreateCourseRequest {
     message: string;
 }
 
-export interface CreateCourseResponse {
+export interface Response {
     success: boolean;
     courseId?: string;
     message?: string;
 }
 
-export interface Course {
-    name: string;
-    content: string;
-    maker_id: string;
-}
-
-export interface CourseListResponse {
-    success: boolean;
+// store/course.ts
+export interface CourseState {
     courses: Course[];
+    selectedCourse: Course | null;
+    setCourses: (courses: Course[]) => void;
+    addCourse: (course: Course) => void;
+    selectCourse: (course: Course) => void;
+    clearSelectedCourse: () => void;
 }
 
-export interface UpdateMessageResponse {
-    success: boolean;
-    message?: string;
-    content?: string; 
+export interface Location {
+    lat: number;
+    lng: number;
 }
 
-export interface UpdateMessageRequest {
-    course_id: number;
-    new_message: string;
+export interface Course {
+    id: number;
+    maker_id: string;
+    name: string;
+    content: {
+        locations: Location[];
+    };
+    rating: number;
 }
 
-export interface UpdateMessageResponse {
-    success: boolean;
-    message?: string;
-    courses?: Course[];
-}
-
-export interface UpdateMessageRequest {
-    new_message: string;
-}
+// hooks/useCourse.ts
+type LocationCoord = { lat: number; lng: number } | null;
+export type LocationState = {
+    address: string;
+    coord: LocationCoord;
+};

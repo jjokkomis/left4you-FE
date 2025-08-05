@@ -1,13 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { createCourse } from "@/services/course";
-import type { KakaoMapHandle } from "@/types/types";
-
-type LocationCoord = { lat: number; lng: number } | null;
-type LocationState = {
-    address: string;
-    coord: LocationCoord;
-};
+import type { KakaoMapHandle, LocationState } from "@/types/types";
 
 export default function useCourseChoice() {
     const [courseName, setCourseName] = useState<string>("");
