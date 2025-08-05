@@ -13,8 +13,8 @@ export default function Step2() {
             <S.Wrapper>
                 <S.Title>코스 미리보기</S.Title>
                 <S.Pack>
-                    <S.PreviewTitle>{courseName}</S.PreviewTitle>
-                    <S.Name>{author}</S.Name>
+                    <S.PreviewTitle>{courseName || "코스 이름 없음"}</S.PreviewTitle>
+                    <S.Name>{author || "익명"}</S.Name>
                 </S.Pack>
             </S.Wrapper>
             <KakaoMap center={locations.A.coord ?? undefined} onSelectLocation={() => {}} />

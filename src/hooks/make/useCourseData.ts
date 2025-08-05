@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { supabase } from "@/lib/supabaseClient";
+import { useEffect, useState } from "react";
+import { getCourseList } from "@/services/course";
 import type { Location } from "@/types/types";
 
 export const useCourseData = () => {
@@ -11,37 +11,29 @@ export const useCourseData = () => {
     });
 
     useEffect(() => {
-        const fetchCourseData = async () => {
-            try {
-                const { data, error } = await supabase
-                    .from("course_make")
-                    .select("*")
-                    .order("id", { ascending: false })
-                    .limit(1)
-                    .single();
+        const fetchCourseList = async () => {
+        const res = await getCourseList();
 
-                if (error || !data) {
-                    console.error(error);
-                    return;
-                }
+        if (res.success && res.courses.length > 0) {
+            const lastCourse = res.courses[0];
+            const content =
+            typeof lastCourse.content === "string"
+                ? JSON.parse(lastCourse.content)
+                : lastCourse.content;
 
-                const content = JSON.parse(data.content);
-
-                if (content.locations?.length === 2) {
-                    setLocations({
-                        A: { address: "위치 A", coord: content.locations[0] },
-                        B: { address: "위치 B", coord: content.locations[1] },
-                    });
-                }
-
-                setCourseName(data.name || "코스 이름 없음");
-                setAuthor(data.maker_id || "익명");
-            } catch (e) {
-                console.error(e);
+            if (content.coordA && content.coordB) {
+            setLocations({
+                A: { address: "위치 A", coord: content.coordA },
+                B: { address: "위치 B", coord: content.coordB },
+            });
             }
+
+            setCourseName(lastCourse.name || "코스 이름 없음");
+            setAuthor(lastCourse.maker_id || "익명");
+        }
         };
 
-        fetchCourseData();
+        fetchCourseList();
     }, []);
 
     return { courseName, author, locations };
