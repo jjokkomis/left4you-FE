@@ -25,17 +25,13 @@ export default function Step1() {
                 },
             },
             rating: 3,
-            message: "사용자가 생성한 코스입니다.",
+            message: "",
         };
 
         const response = await createCourse(data);
 
-        if (response.success) {
-            console.log("코스 ID:", response.courseId);
-            alert("코스가 성공적으로 등록되었습니다!");
-        } else {
-            alert("코스 등록 실패: " + response.message);
-        }
+        if (response.success) alert("코스가 성공적으로 등록되었습니다!");
+        else alert("코스 등록 실패: " + response.message);
     };
 
     return (

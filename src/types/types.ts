@@ -9,7 +9,10 @@ export interface KakaoMapHandle {
 
 export interface Location {
     address: string;
-    coord: { lat: number; lng: number } | null;
+    coord: {
+        lat: number | null;
+        lng: number | null;
+    } | null;
 }
 
 export interface CourseData {
@@ -18,7 +21,6 @@ export interface CourseData {
     message?: string;
     id: string;
 }
-
 export interface BtnProps {
     children: React.ReactNode;
     onClick?: () => void;
@@ -30,7 +32,7 @@ interface Coordinates {
     lng: number;
 }
 
-interface Content {
+export interface Content {
     coordA: Coordinates;
     coordB: Coordinates;
 }
@@ -57,11 +59,6 @@ export interface CourseState {
     addCourse: (course: Course) => void;
     selectCourse: (course: Course) => void;
     clearSelectedCourse: () => void;
-}
-
-export interface Location {
-    lat: number;
-    lng: number;
 }
 
 export interface Course {

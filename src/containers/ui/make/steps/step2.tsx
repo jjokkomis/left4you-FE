@@ -10,19 +10,22 @@ export default function Step2() {
     const [courseName, setCourseName] = useState("코스 이름 없음");
     const [author, setAuthor] = useState("익명");
     const [locations, setLocations] = useState<{ A: Location; B: Location }>({
-        A: { address: "위치 A", coord: null },
-        B: { address: "위치 B", coord: null },
+        A: { address: "위치 A", coord: { lat: null, lng: null } },
+        B: { address: "위치 B", coord: { lat: null, lng: null } },
     });
 
     useEffect(() => {
         getCourseList().then((res) => {
             if (res.success && res.courses.length > 0) {
                 const lastCourse = res.courses[0];
-                const content = typeof lastCourse.content === "string" ? JSON.parse(lastCourse.content) : lastCourse.content;
+                const content =
+                    typeof lastCourse.content === "string"
+                        ? JSON.parse(lastCourse.content)
+                        : lastCourse.content;
 
                 setLocations({
-                    A: { address: "위치 A", coord: content.coordA || null },
-                    B: { address: "위치 B", coord: content.coordB || null },
+                    A: { address: "위치 A", coord: content.coordA || { lat: null, lng: null } },
+                    B: { address: "위치 B", coord: content.coordB || { lat: null, lng: null } },
                 });
 
                 setCourseName(lastCourse.name || "코스 이름 없음");
