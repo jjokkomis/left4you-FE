@@ -3,7 +3,7 @@
 import * as S from "../style";
 import KakaoMap from "@/components/layout/map/kakaoMap";
 import Btn from "@/components/ui/button/button";
-import useCourseChoice from "@/hooks/make/useCourse";
+import useCourseChoice from "@/hooks/useCourse";
 import Image from "next/image";
 import createCourse from "@/services/course";
 
