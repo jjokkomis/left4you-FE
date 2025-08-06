@@ -28,6 +28,9 @@ export interface CreateCourse {
     name: string;
     content: string;
     rating: number;
+    place_name: string;
+    latitude: number;
+    longitude: number;
 }
 
 export interface Response {
@@ -74,4 +77,19 @@ export interface Course {
         locations: Location[];
     };
     rating: number;
+}
+
+export interface CoursePayload {
+    course: {
+        maker_id: number;
+        name: string;
+        content: string;
+        rating: number;
+    };
+    place: {
+        course_id?: number; 
+        place_name: string;
+        latitude: number;
+        longitude: number;
+    };
 }
