@@ -2,14 +2,10 @@
 
 import * as S from "../style";
 import KakaoMap from "@/components/layout/map/kakaoMap";
-import { useQuery } from "@tanstack/react-query";
-import { getCourseList } from "@/services/course";
+import useCourse from "@/hooks/useCourse";
 
 export default function Step2() {
-    const { data, isLoading, error } = useQuery({
-        queryKey: ["courseList"],
-        queryFn: getCourseList,
-    });
+    const { courseList: data, isCourseListLoading: isLoading, courseListError: error } = useCourse();
 
     if (isLoading) return <S.Loading>로딩 중...</S.Loading>;
     if (error || !data?.success || data.courses.length === 0) return <S.Loading>에러 발생 또는 코스 없음</S.Loading>;

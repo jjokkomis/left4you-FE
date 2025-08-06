@@ -2,17 +2,12 @@
 
 import * as S from "../style";
 import Btn from "@/components/ui/button/button";
-import { getCourseList } from "@/services/course";
-import { useQuery } from "@tanstack/react-query";
+import useCourse from "@/hooks/useCourse";
 import { useRouter } from "next/navigation";
 
 export default function Step3() {
     const router = useRouter();
-
-    const { data, isLoading, error } = useQuery({
-        queryKey: ["courseList"],
-        queryFn: getCourseList,
-    });
+    const { courseList: data, isCourseListLoading: isLoading, courseListError: error } = useCourse();
 
     const handleSaveAndRedirect = () => {
         alert("저장이 성공적으로 완료되었습니다.");
