@@ -1,24 +1,45 @@
-'use client';
+"use client";
 
 import * as S from "../style";
-import Btn from "@/components/ui/button/button";
-import Image from "next/image";
 import KakaoMap from "@/components/layout/map/kakaoMap";
+import Btn from "@/components/ui/button/button";
+import useCourseChoice from "@/hooks/useCourse";
+import Image from "next/image";
 
 export default function Step1() {
+    const { courseName, setCourseName, selected, setSelected, locations, handleSelectLocation, handleInput, mapRef, inputRefs, handleSaveData } = useCourseChoice();
+
     return (
         <S.Container>
             <S.Wrapper>
                 <S.Title>코스 이름</S.Title>
-                <S.CourseName placeholder="코스 이름을 입력해주세요" />
+                <S.CourseName
+                    placeholder="코스 이름을 입력해주세요"
+                    value={courseName}
+                    onChange={(e) => setCourseName(e.target.value)}
+                />
             </S.Wrapper>
-            <KakaoMap />
-            <h4> <Image src="/assets/Barrow.svg" alt="arrow" width={10} height={10} /> 서울 강남구 역삼동 823-23 </h4>
+            <KakaoMap onSelectLocation={handleSelectLocation} ref={mapRef} />
+            <S.MyLocationGroup>
+                <Image src="/assets/Barrow.svg" alt="화살표 아이콘" width={10} height={10} />
+                {locations[selected]?.address || "위치를 선택해주세요."}
+            </S.MyLocationGroup>
             <S.Group>
-                <S.Course>한강 공원</S.Course>
-                <S.Course>롯데월드타워</S.Course>
+                {["A", "B"].map((course) => (
+                    <S.Course
+                        key={course}
+                        contentEditable
+                        suppressContentEditableWarning
+                        spellCheck={false}
+                        onInput={(e) => handleInput(e, course as "A" | "B")}
+                        onClick={() => setSelected(course as "A" | "B")}
+                        ref={inputRefs[course as "A" | "B"]}
+                    >
+                        {locations[course as "A" | "B"]?.address || "주소를 입력해주세요."}
+                    </S.Course>
+                ))}
             </S.Group>
-            <Btn>위치등록</Btn>
+            <Btn onClick={handleSaveData}>위치등록</Btn>
         </S.Container>
     );
 }

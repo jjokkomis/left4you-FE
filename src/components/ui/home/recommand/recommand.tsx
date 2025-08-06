@@ -6,7 +6,7 @@ export default function Recommand() {
     const router = useRouter();
 
     const Course = () => {
-        router.push('/make');
+        router.push('/course/create');
     };
 
     return (
