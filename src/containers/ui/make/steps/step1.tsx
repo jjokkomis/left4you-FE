@@ -5,34 +5,9 @@ import KakaoMap from "@/components/layout/map/kakaoMap";
 import Btn from "@/components/ui/button/button";
 import useCourseChoice from "@/hooks/useCourse";
 import Image from "next/image";
-import createCourse from "@/services/course";
 
 export default function Step1() {
-    const { courseName, setCourseName, selected, setSelected, locations, handleSelectLocation, handleInput, mapRef, inputRefs } = useCourseChoice();
-
-    const handleSaveData = async () => {
-        const data = {
-            maker_id: "1",
-            name: courseName,
-            content: {
-                coordA: {
-                    lat: locations["A"]?.coord?.lat ?? 0,
-                    lng: locations["A"]?.coord?.lng ?? 0,
-                },
-                coordB: {
-                    lat: locations["B"]?.coord?.lat ?? 0,
-                    lng: locations["B"]?.coord?.lng ?? 0,
-                },
-            },
-            rating: 3,
-            message: "",
-        };
-
-        const response = await createCourse(data);
-
-        if (response.success) alert("코스가 성공적으로 등록되었습니다!");
-        else alert("코스 등록 실패: " + response.message);
-    };
+    const { courseName, setCourseName, selected, setSelected, locations, handleSelectLocation, handleInput, mapRef, inputRefs, handleSaveData } = useCourseChoice();
 
     return (
         <S.Container>
@@ -47,7 +22,7 @@ export default function Step1() {
             <KakaoMap onSelectLocation={handleSelectLocation} ref={mapRef} />
             <S.MyLocationGroup>
                 <Image src="/assets/Barrow.svg" alt="화살표 아이콘" width={10} height={10} />
-                {locations[selected].address || "선택한 위치가 없습니다."}
+                {locations[selected]?.address || "위치를 선택해주세요."}
             </S.MyLocationGroup>
             <S.Group>
                 {["A", "B"].map((course) => (
@@ -60,7 +35,7 @@ export default function Step1() {
                         onClick={() => setSelected(course as "A" | "B")}
                         ref={inputRefs[course as "A" | "B"]}
                     >
-                        {locations[course as "A" | "B"].address}
+                        {locations[course as "A" | "B"]?.address || "주소를 입력해주세요."}
                     </S.Course>
                 ))}
             </S.Group>

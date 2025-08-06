@@ -7,48 +7,53 @@ export interface KakaoMapHandle {
     moveToAddress: (address: string) => void;
 }
 
-export interface Location {
+export interface LocationState {
+    address: string;
+    coord: {
+        latitude: number;
+        longitude: number;
+    } | null;
+}
+
+export type Location = {
     address: string;
     coord: {
         lat: number | null;
         lng: number | null;
-    } | null;
-}
+    };
+};
 
-export interface CourseData {
+export interface CreateCourse {
+    maker_id: string;
     name: string;
     content: string;
-    message?: string;
-    id: string;
+    rating: number;
 }
+
+export interface Response {
+    success: boolean;
+    courseId?: number;
+    error?: string;
+}
+
+export type CourseData = {
+    course_id: number;
+    course_name: string;
+    latitude?: number;
+    longitude?: number;
+};
+
+
 export interface BtnProps {
     children: React.ReactNode;
     onClick?: () => void;
 }
 
-// course.ts
-interface Coordinates {
-    lat: number;
-    lng: number;
-}
-
-export interface Content {
-    coordA: Coordinates;
-    coordB: Coordinates;
-}
-
 export interface CreateCourse {
     maker_id: string;
     name: string;
-    content: Content;  
+    content: string;
     rating: number;
-    message: string;
-}
-
-export interface Response {
-    success: boolean;
-    courseId?: string;
-    message?: string;
 }
 
 // store/course.ts
@@ -70,10 +75,3 @@ export interface Course {
     };
     rating: number;
 }
-
-// hooks/useCourse.ts
-type LocationCoord = { lat: number; lng: number } | null;
-export type LocationState = {
-    address: string;
-    coord: LocationCoord;
-};

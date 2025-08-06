@@ -1,7 +1,6 @@
-import { useMutation } from "@tanstack/react-query";
 import { useState, useRef, useEffect, useCallback } from "react";
-import { createCourse } from "@/services/course";
 import type { KakaoMapHandle, LocationState } from "@/types/types";
+import { createCourse } from "@/services/course";
 
 export default function useCourseChoice() {
     const [courseName, setCourseName] = useState<string>("");
@@ -18,11 +17,13 @@ export default function useCourseChoice() {
     };
 
     const handleSelectLocation = useCallback(
-        (lat: number, lng: number, address: string) => {
+        (latitude: number, longitude: number, address: string) => {
         setLocations((prev) => ({
             ...prev,
-            [selected]: { address, coord: { lat, lng } },
-        }));}, [selected]
+            [selected]: { address, coord: { latitude, longitude } },
+        }));
+        },
+        [selected]
     );
 
     const handleInput = useCallback(
@@ -34,36 +35,74 @@ export default function useCourseChoice() {
         }));
 
         if (mapRef.current) {
-            mapRef.current.moveToAddress(text); }},
-            [] );
+            mapRef.current.moveToAddress(text);
+        }
+        },
+        []
+    );
 
     useEffect(() => {
         Object.entries(inputRefs).forEach(([key, ref]) => {
         const course = key as "A" | "B";
         if (ref.current && ref.current.textContent !== locations[course].address) {
             ref.current.textContent = locations[course].address;
-        }}); }, [locations]);
-
-    const { mutate } = useMutation({ mutationFn: createCourse });
-
-    const handleSaveData = () => {
-        mutate({
-        maker_id: "1",
-        name: courseName,
-        content: {
-            coordA: { lat: locations.A.coord?.lat || 0, lng: locations.A.coord?.lng || 0 },
-            coordB: { lat: locations.B.coord?.lat || 0, lng: locations.B.coord?.lng || 0 },
-        },
-        rating: 3,
-        message: "사용자가 생성한 코스입니다.",
+        }
         });
-    };
+    }, [locations]);
+
+    const handleSaveData = async () => {
+        if (!courseName) {
+        alert("코스 이름을 입력해주세요.");
+        return;
+        }
+
+        if (!locations[selected]?.address || !locations[selected]?.coord) {
+        alert("장소와 좌표를 선택해주세요.");
+        return;
+        }
+
+        const { latitude, longitude } = locations[selected].coord;
+
+        if (typeof latitude !== "number" || typeof longitude !== "number") {
+        alert("위치 좌표가 올바르지 않습니다.");
+        return;
+        }
+
+        const payload = {
+        course: {
+            maker_id: 1,
+            name: courseName,
+            content: "서울 명소를 방문하는 코스입니다.",
+            rating: 5,
+        },
+        place: {
+            course_id: 1,
+            place_name: locations[selected].address,
+            latitude,
+            longitude,
+        },
+        };
+
+    try {
+        const response = await createCourse(payload);
+            console.log("서버 응답:", response);
+            alert("코스와 장소가 성공적으로 등록되었습니다!");
+        } catch (error) {
+            console.error("등록 중 오류:", error);
+            alert("등록 실패: 알 수 없는 오류가 발생했습니다.");
+        }
+    }
 
     return {
-        courseName, setCourseName,
-        selected, setSelected,
-        locations, handleSelectLocation,
-        handleInput, mapRef,
-        inputRefs, handleSaveData,
+        courseName,
+        setCourseName,
+        selected,
+        setSelected,
+        locations,
+        handleSelectLocation,
+        handleInput,
+        mapRef,
+        inputRefs,
+        handleSaveData,
     };
 }

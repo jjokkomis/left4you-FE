@@ -17,19 +17,15 @@ export default function Step2() {
     useEffect(() => {
         getCourseList().then((res) => {
             if (res.success && res.courses.length > 0) {
-                const lastCourse = res.courses[0];
-                const content =
-                    typeof lastCourse.content === "string"
-                        ? JSON.parse(lastCourse.content)
-                        : lastCourse.content;
+            const lastCourse = res.courses[0];
 
-                setLocations({
-                    A: { address: "위치 A", coord: content.coordA || { lat: null, lng: null } },
-                    B: { address: "위치 B", coord: content.coordB || { lat: null, lng: null } },
-                });
+            setLocations({
+                A: { address: "위치 A", coord: { lat: lastCourse.latitude, lng: lastCourse.longitude } },
+                B: { address: "위치 B", coord: { lat: lastCourse.latitude, lng: lastCourse.longitude } }, 
+            });
 
-                setCourseName(lastCourse.name || "코스 이름 없음");
-                setAuthor(lastCourse.maker_id || "익명");
+            setCourseName(lastCourse.course_name || "코스 이름 없음");
+            setAuthor("익명");
             }
         });
     }, []);
@@ -43,7 +39,9 @@ export default function Step2() {
                     <S.Name>{author}</S.Name>
                 </S.Pack>
             </S.Wrapper>
+
             <KakaoMap center={locations.A.coord ?? undefined} onSelectLocation={() => {}} />
+
             <S.Group>
                 {Object.entries(locations).map(([key, location]) => (
                     <S.Course key={key}>
