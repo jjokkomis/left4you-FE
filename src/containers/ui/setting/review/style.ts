@@ -3,9 +3,9 @@ import styled from "@emotion/styled";
 export const Container = styled.div`
     display: flex;
     flex-direction: column;
-    row-gap: 3.2rem;
+    row-gap: 2.4rem;
     width: 100%;
-    margin-top: 10%;
+    margin-top: 2%;
     max-width: 400px;
     overflow: hidden;
 `;
@@ -13,7 +13,7 @@ export const Container = styled.div`
 export const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
-    row-gap: 1.4rem;
+    row-gap: 1rem;
 `;
 
 export const Img = styled.div`
