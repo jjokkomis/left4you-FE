@@ -6,6 +6,7 @@ export const Container = styled.div`
     row-gap: 2.4rem;
     width: 100%;
     margin-top: 2%;
+    padding: 0rem 1rem 0rem 1rem ;
     max-width: 400px;
     overflow: hidden;
 `;
