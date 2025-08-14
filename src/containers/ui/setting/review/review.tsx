@@ -10,6 +10,11 @@ export default function ReviewPage() {
     const router = useRouter();
     const [count, setR] = useState(0);
 
+    const handleAlertt = () => {
+        alert("리뷰 작성을 완료하였습니다.");
+        router.push("/setting");
+    };
+
     return (
         <S.Container>
             <Image src="assets/back-button.svg" alt="review📝" width={20} height={20} onClick={() => router.back()}/>
@@ -29,7 +34,7 @@ export default function ReviewPage() {
                 <S.ReviewTitle placeholder='리뷰 제목을 적어주세요'/>
                 <S.Review placeholder='리뷰를 작성해주세요'/>
             </S.Wrapper>
-            <Btn> 리뷰작성 </Btn>
+            <Btn onClick={handleAlertt}> 리뷰작성 </Btn>
         </S.Container>
     );
 }
