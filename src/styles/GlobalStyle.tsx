@@ -17,7 +17,8 @@ const GlobalStyle = () => (
       }
 
       html,
-      body {
+      body,
+      * {
         font-family: "MiraeroNormal", sans-serif;
       }
 
