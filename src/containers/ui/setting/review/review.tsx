@@ -42,7 +42,7 @@ export default function ReviewPage() {
                 <S.ReviewTitle placeholder='리뷰 제목을 적어주세요' />
                 <S.Review 
                     placeholder='리뷰를 작성해주세요' 
-                    maxLength={200} 
+                    maxLength={130} 
                 />
             </S.Wrapper>
             <Btn onClick={handleAlertt}>리뷰작성</Btn>
