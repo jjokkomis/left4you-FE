@@ -3,8 +3,14 @@ export interface StepProps {
     onNext: () => void;
     onPrev: () => void;
 }
+export interface MapProps {
+    onSelectLocation: (lat: number, lng: number, address: string) => void;
+    center?: { lat: number; lng: number };
+}
+
 export interface KakaoMapHandle {
     moveToAddress: (address: string) => void;
+    moveToLatLng: (lat: number, lng: number) => void;
 }
 
 export interface LocationState {
