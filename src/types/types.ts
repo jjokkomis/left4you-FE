@@ -13,6 +13,12 @@ export interface KakaoMapHandle {
     moveToLatLng: (lat: number, lng: number) => void;
 }
 
+export interface MapProps {
+  onSelectLocation: (lat: number, lng: number, address: string) => void;
+  center?: { lat: number; lng: number };
+  height?: number | string;
+}
+
 export interface LocationState {
     address: string;
     coord: {

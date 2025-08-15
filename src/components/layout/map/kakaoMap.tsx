@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useImperativeHandle, forwardRef } from "re
 
 const KakaoMap = forwardRef<KakaoMapHandle, MapProps & { height?: string }>(
   ({ onSelectLocation, center, height = "400px" }, ref) => {
+const KakaoMap = forwardRef<KakaoMapHandle, MapProps>(({ onSelectLocation, center, height }, ref) => {
     const mapRef = useRef<HTMLDivElement>(null);
     const mapInstance = useRef<any>(null);
     const marker = useRef<any>(null);
@@ -120,7 +121,7 @@ const KakaoMap = forwardRef<KakaoMapHandle, MapProps & { height?: string }>(
     }));
 
     return <div ref={mapRef} style={{ width: "100%", height: height, borderRadius: "0.2rem" }} />;
-  }
-);
+  });
+});
 
 export default KakaoMap;

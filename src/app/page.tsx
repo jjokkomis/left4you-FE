@@ -15,7 +15,7 @@ export default function HomePage() {
 
   if (loggedIn === null) {
     return (
-      <div>로딩 중…</div>
+      <div>로딩 중...</div>
     );
   }
 

@@ -5,6 +5,8 @@ import styled from "@emotion/styled";
 import Image from "next/image";
 
 const MENU_ITEMS = [
+  { path: "/create", icon: "/assets/bottomBar/add.svg" },
+  { path: "/receive", icon: "/assets/bottomBar/send.svg" },
   { path: "/make", icon: "/assets/bottomBar/add.svg" },
   { path: "/send", icon: "/assets/bottomBar/send.svg" },
   { path: "/", icon: "/assets/bottomBar/home.svg" },
