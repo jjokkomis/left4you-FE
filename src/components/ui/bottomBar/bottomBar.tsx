@@ -7,6 +7,8 @@ import Image from "next/image";
 const MENU_ITEMS = [
   { path: "/create", icon: "/assets/bottomBar/add.svg" },
   { path: "/receive", icon: "/assets/bottomBar/send.svg" },
+  { path: "/make", icon: "/assets/bottomBar/add.svg" },
+  { path: "/send", icon: "/assets/bottomBar/send.svg" },
   { path: "/", icon: "/assets/bottomBar/home.svg" },
   { path: "/map", icon: "/assets/bottomBar/map.svg" },
   { path: "/setting", icon: "/assets/bottomBar/setting.svg" },
