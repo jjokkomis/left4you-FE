@@ -10,7 +10,6 @@ export function useGetSurvey(): UseQueryResult<Survey, Error> {
             const res = await getSurvey();
             return res;
         },
-        enabled: false,
     })
 }
 
