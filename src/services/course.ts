@@ -1,5 +1,5 @@
 import customAxios from "@/lib/customAxios";
-import type { CreateCourse, Response, UpdateCourse, AddReviewRequest } from "@/types/types";
+import type { CreateCourse, Response, UpdateCourse, Review } from "@/types/types";
 
 const createCourse = async (data: CreateCourse) => {
     const response = await customAxios.post("/course/create", data);
@@ -23,14 +23,21 @@ const updateCourse = async (
     return response.data;
 };
 
-const getCourseById = async (course_id: number) => {
-    const response = await customAxios.get<Response>(`/course/${course_id}`);
+export const addCourseReview = async ({ course_id, title, body, score }: { course_id: number; title: string; body: string; score: number }) => {
+    const response = await customAxios.post(`/course/${course_id}/review`, {
+        title, body, score });
     return response.data;
-}
+};
 
-export const addCourseReview = async (data: AddReviewRequest) => 
-    (await customAxios.post(`/course/${data.course_id}/review`, data)).data;
+export const getCourseById = async (course_id: number) => {
+    const response = await customAxios.get(`/course/${course_id}`);
+    return response.data;
+};
 
+export const getAllReview = async (course_id: number): Promise<Review[]> => {
+    const response = await customAxios.get(`/course/${course_id}/reviews`);
+    return response.data;
+};
 
-export { createCourse, getCourseList, getCourseReviewList, updateCourse, getCourseById };
+export { createCourse, getCourseList, getCourseReviewList, updateCourse };
 export default createCourse;

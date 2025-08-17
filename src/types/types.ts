@@ -142,3 +142,14 @@ export interface AddReviewRequest {
     score: number;
     user_id: number;
 }
+
+export interface Review {
+    id: number;
+    course_id: number;
+    title: string;
+    body: string;
+    score: number;
+    created_at: string;
+    user_id?: number;
+    user_name?: string;
+}
