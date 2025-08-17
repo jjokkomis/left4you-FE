@@ -12,7 +12,7 @@ export default function useCourse(courseId?: number) {
     });
 
     const mapRef = useRef<KakaoMapHandle | null>(null);
-    const inputRefs = { A: useRef(null), B: useRef(null) };
+    const inputRefs = { A: useRef<HTMLDivElement>(null), B: useRef<HTMLDivElement>(null) };
 
     const { data: courseList, isLoading, error, refetch } = useQuery({
         queryKey: ["courseList"],
@@ -28,40 +28,34 @@ export default function useCourse(courseId?: number) {
 
     const mutation = useMutation({
         mutationFn: createCourse,
-        onSuccess: (data) => {
-        if (!data?.data) alert("작성을 완료하였습니다");
-        refetch();
-        },
-        onError: (e: Error) => console.log(e.message),
+        onSuccess: () => { alert("코스를 성공적으로 등록했습니다!"); refetch(); },
+        onError: (err: Error) => console.error(err.message),
     });
 
     const handleSelectLocation = useCallback(
-        (lat: number, lng: number, addr: string) =>
-        setLocations((p) => ({ ...p, [selected]: { address: addr, coord: { latitude: lat, longitude: lng } } })),
+        (lat: number, lng: number, address: string) =>
+        setLocations((prev) => ({ ...prev, [selected]: { address, coord: { latitude: lat, longitude: lng } } })),
         [selected]
     );
 
-    const handleInput = useCallback((e: React.FormEvent<HTMLDivElement>, course: "A" | "B") => {
+    const handleInput = useCallback(
+        (e: React.FormEvent<HTMLDivElement>, course: "A" | "B") => {
         const text = e.currentTarget.textContent || "";
-        setLocations((p) => ({ ...p, [course]: { ...p[course], address: text } }));
+        setLocations((prev) => ({ ...prev, [course]: { ...prev[course], address: text } }));
         mapRef.current?.moveToAddress(text);
-    }, []);
+        },
+        []
+    );
 
-    const handleSaveData = () => {
-        if (!courseName || !locations[selected]?.address || !locations[selected]?.coord) return;
-        const { latitude, longitude } = locations[selected].coord;
+    const handleSaveData = useCallback(() => {
+        const loc = locations[selected];
+        if (!courseName || !loc?.address || !loc?.coord) return;
+        const { latitude, longitude } = loc.coord;
         if (typeof latitude !== "number" || typeof longitude !== "number") return;
-        mutation.mutate({
-        course: { maker_id: 1, name: courseName, content: "", rating: 2 },
-        place: { course_id: 1, place_name: locations[selected].address, latitude, longitude },
-        });
-    };
+        mutation.mutate({ maker_id: 2, name: courseName, content: "", rating: 2, place_name: loc.address, latitude, longitude });
+    }, [courseName, selected, locations, mutation]);
 
-    return {
-        courseName, setCourseName, selected, setSelected,
-        locations, handleSelectLocation, handleInput,
-        mapRef, inputRefs, handleSaveData,
-        isLoading, courseList, courseListError: error,
-        courseDetail, isDetailLoading
-    };
+    return { courseName, setCourseName, selected, setSelected, locations, handleSelectLocation,
+            handleInput, mapRef, inputRefs, handleSaveData,
+            isLoading, courseList, courseListError: error, courseDetail, isDetailLoading };
 }
