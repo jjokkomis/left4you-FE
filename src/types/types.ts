@@ -118,3 +118,15 @@ export interface UpdateCourse {
     body: string;
     rating: number;
 }
+
+export interface CourseGift{
+    id: number;
+    course_id: number;
+    course_name: string;
+    recipient_id: number;
+};
+
+export interface ResponseGift<T = string> {
+    success: boolean;
+    courses: T;
+}
