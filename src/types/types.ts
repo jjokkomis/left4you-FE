@@ -35,16 +35,6 @@ export type Location = {
     };
 };
 
-export interface CreateCourse {
-    maker_id: string;
-    name: string;
-    content: string;
-    rating: number;
-    place_name: string;
-    latitude: number;
-    longitude: number;
-}
-
 export interface Response {
     success: boolean;
     courseId?: number;
@@ -65,10 +55,13 @@ export interface BtnProps {
 }
 
 export interface CreateCourse {
-    maker_id: string;
+    maker_id: number;
     name: string;
     content: string;
     rating: number;
+    place_name: string;
+    latitude: number;
+    longitude: number;
 }
 
 // store/course.ts
