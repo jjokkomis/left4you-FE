@@ -14,9 +14,9 @@ export interface KakaoMapHandle {
 }
 
 export interface MapProps {
-  onSelectLocation: (lat: number, lng: number, address: string) => void;
-  center?: { lat: number; lng: number };
-  height?: number | string;
+    onSelectLocation: (lat: number, lng: number, address: string) => void;
+    center?: { lat: number; lng: number };
+    height?: number | string;
 }
 
 export interface LocationState {
@@ -104,4 +104,17 @@ export interface CoursePayload {
         latitude: number;
         longitude: number;
     };
+}
+
+export interface CourseReview {
+    course_id: number;
+    course_name: string;
+    isMine?: boolean;
+}
+
+export interface UpdateCourse {
+    course_id: number;
+    title: string;
+    body: string;
+    rating: number;
 }
