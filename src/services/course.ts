@@ -1,5 +1,5 @@
 import customAxios from "@/lib/customAxios";
-import type { CreateCourse, Response, UpdateCourse, ResponseGift } from "@/types/types";
+import type { CreateCourse, Response, UpdateCourse, AddReviewRequest } from "@/types/types";
 
 const createCourse = async (data: CreateCourse) => {
     const response = await customAxios.post("/course/create", data);
@@ -26,14 +26,11 @@ const updateCourse = async (
 const getCourseById = async (course_id: number) => {
     const response = await customAxios.get<Response>(`/course/${course_id}`);
     return response.data;
-};
+}
 
-const getCourseGift = async (course_id: number): Promise<ResponseGift<ResponseGift[]>> => {
-    const response = await customAxios.get<ResponseGift<ResponseGift[]>>(
-        `/course/gift/${course_id}`
-    );
-    return response.data;
-};
+export const addCourseReview = async (data: AddReviewRequest) => 
+    (await customAxios.post(`/course/${data.course_id}/review`, data)).data;
 
-export { createCourse, getCourseList, getCourseReviewList, updateCourse, getCourseById, getCourseGift };
+
+export { createCourse, getCourseList, getCourseReviewList, updateCourse, getCourseById };
 export default createCourse;

@@ -100,9 +100,8 @@ export interface CoursePayload {
 }
 
 export interface CourseReview {
-    course_id: number;
-    course_name: string;
-    isMine?: boolean;
+    id: number;
+    name: string;
 }
 
 export interface UpdateCourse {
@@ -119,7 +118,27 @@ export interface CourseGift{
     recipient_id: number;
 };
 
-export interface ResponseGift<T = string> {
+export interface ResponseGift<T = CourseGift[]> {
     success: boolean;
     courses: T;
+}
+
+export interface UpdateCourseRequest {
+    title: string;
+    body: string;
+    score: number;
+}
+
+export interface UpdateCourseRequest {
+    title: string;
+    body: string;
+    score: number;
+}
+
+export interface AddReviewRequest {
+    course_id: number;
+    title: string;
+    body: string;
+    score: number;
+    user_id: number;
 }
