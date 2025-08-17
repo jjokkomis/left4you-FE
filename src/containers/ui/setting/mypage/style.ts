@@ -26,9 +26,17 @@ export const SubTitle = styled.div`
 
 export const Box = styled.button`
     display: flex;
+    align-items: center;
     height: 10vh;
-    background-color: #364155;
+    padding: 2rem;
+    background: rgba(0, 0, 0, 0.5);
     border: none;
     border-radius: 0.4rem;
     cursor: pointer;
+`;
+
+export const CourseName = styled.div`
+    display: flex;
+    font-size: 1.25rem;
+    color: #fff;
 `;

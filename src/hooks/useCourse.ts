@@ -1,9 +1,9 @@
 import { useState, useRef, useCallback } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import type { KakaoMapHandle, LocationState } from "@/types/types";
-import { createCourse, getCourseList } from "@/services/course";
+import { createCourse, getCourseList, getCourseById } from "@/services/course";
 
-export default function useCourse() {
+export default function useCourse(courseId?: number) {
     const [courseName, setCourseName] = useState("");
     const [selected, setSelected] = useState<"A" | "B">("A");
     const [locations, setLocations] = useState<{ A: LocationState; B: LocationState }>({
@@ -14,23 +14,36 @@ export default function useCourse() {
     const mapRef = useRef<KakaoMapHandle | null>(null);
     const inputRefs = { A: useRef(null), B: useRef(null) };
 
+    const { data: courseList, isLoading, error, refetch } = useQuery({
+        queryKey: ["courseList"],
+        queryFn: getCourseList,
+        staleTime: 0,
+    });
+
+    const { data: courseDetail, isLoading: isDetailLoading } = useQuery({
+        queryKey: ["courseDetail", courseId],
+        queryFn: () => getCourseById(courseId!),
+        enabled: !!courseId,
+    });
+
     const mutation = useMutation({
         mutationFn: createCourse,
         onSuccess: (data) => {
-            if (!data?.data) alert("작성을 완료하였습니다");
+        if (!data?.data) alert("작성을 완료하였습니다");
+        refetch();
         },
         onError: (e: Error) => console.log(e.message),
     });
 
     const handleSelectLocation = useCallback(
         (lat: number, lng: number, addr: string) =>
-            setLocations(p => ({ ...p, [selected]: { address: addr, coord: { latitude: lat, longitude: lng } } })),
+        setLocations((p) => ({ ...p, [selected]: { address: addr, coord: { latitude: lat, longitude: lng } } })),
         [selected]
     );
 
     const handleInput = useCallback((e: React.FormEvent<HTMLDivElement>, course: "A" | "B") => {
         const text = e.currentTarget.textContent || "";
-        setLocations(p => ({ ...p, [course]: { ...p[course], address: text } }));
+        setLocations((p) => ({ ...p, [course]: { ...p[course], address: text } }));
         mapRef.current?.moveToAddress(text);
     }, []);
 
@@ -39,21 +52,16 @@ export default function useCourse() {
         const { latitude, longitude } = locations[selected].coord;
         if (typeof latitude !== "number" || typeof longitude !== "number") return;
         mutation.mutate({
-            course: { maker_id: 1, name: courseName, content: "", rating: 2 },
-            place: { course_id: 1, place_name: locations[selected].address, latitude, longitude },
+        course: { maker_id: 1, name: courseName, content: "", rating: 2 },
+        place: { course_id: 1, place_name: locations[selected].address, latitude, longitude },
         });
     };
-
-    const { data, isLoading, error } = useQuery({
-        queryKey: ["courseList"],
-        queryFn: getCourseList,
-    });
 
     return {
         courseName, setCourseName, selected, setSelected,
         locations, handleSelectLocation, handleInput,
         mapRef, inputRefs, handleSaveData,
-        isLoading: mutation, error: mutation.error,
-        courseList: data, isCourseListLoading: isLoading, courseListError: error
+        isLoading, courseList, courseListError: error,
+        courseDetail, isDetailLoading
     };
 }
