@@ -1,5 +1,5 @@
 import customAxios from "@/lib/customAxios";
-import type { CreateCourse, Response, UpdateCourse, Review } from "@/types/types";
+import type { CreateCourse, Response, UpdateCourse } from "@/types/types";
 
 const createCourse = async (data: CreateCourse) => {
     const response = await customAxios.post("/course/create", data);
@@ -23,13 +23,18 @@ const updateCourse = async (
     return response.data;
 };
 
-export const addCourseReview = async ({ course_id, title, body, score }: { course_id: number; title: string; body: string; score: number }) => {
+export const addCourseReview = async ({ course_id, title, body, score, author_id }: { course_id: number; title: string; body: string; score: number, author_id: number}) => {
     const response = await customAxios.post(`/course/${course_id}`, {
-        title, body, score });
+        title, body, score, author_id });
     return response.data;
 };
 
 export const getCourseById = async (course_id: number) => {
+    const response = await customAxios.get(`/course/${course_id}`);
+    return response.data;
+};
+
+export const getAllReview = async (course_id: number) => {
     const response = await customAxios.get(`/course/${course_id}`);
     return response.data;
 };
