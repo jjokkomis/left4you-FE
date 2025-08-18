@@ -6,21 +6,26 @@ import Btn from '@/components/ui/button/button';
 import Image from 'next/image';
 import KakaoMap from '@/components/layout/map/kakaoMap';
 import { REGIONS, Region } from '@/types/receive';
-import { useGetGiftData } from '@/hooks/useReceive';
+import { useClaimCourse, useGetGiftData } from '@/hooks/useReceive';
 import { useGetSurvey } from '@/hooks/useSurvey';
 import { mapSurveyThemeEmotion } from '@/types/survey';
 
 export default function ReceiveContainer() {
   const [region, setRegion] = useState<Region>('서울');
   const [started, setStarted] = useState(false);
+  const [excludeId, setExcludeId] = useState<number | undefined>(undefined);
 
   const { data: surveyData } = useGetSurvey();
   const { themes, emotions } = mapSurveyThemeEmotion(surveyData);
   const emotionText = emotions[0] || '누군가를 떠올리며';
   const themeText = themes[0] || '조용한 서점';
 
-  const handleSelect = useCallback((r: Region) => setRegion(r), []);
-  const { data, isLoading, refetch, isFetching } = useGetGiftData(region, { enabled: started });
+  const handleSelect = useCallback((r: Region) => {
+    setRegion(r);
+    setExcludeId(undefined);
+  }, []);
+  const { data, isLoading, refetch, isFetching } = useGetGiftData(region, { enabled: started, excludeCourseId: excludeId });
+  const { mutate: claim } = useClaimCourse();
 
   const handleReceive = () => {
     if (!started) {
@@ -29,6 +34,15 @@ export default function ReceiveContainer() {
       refetch();
     }
   };
+
+  const handleRetry = () => {
+    if (data?.courseId) setExcludeId(data.courseId);
+    refetch();
+  }
+
+  const handleClaim = () => {
+    claim({ region, courseId: data?.courseId });
+  }
 
   if (isLoading || isFetching) {
     return (
@@ -65,7 +79,8 @@ export default function ReceiveContainer() {
             </S.PeriodBlock>
           ))}
         </S.DayFlow>
-        <Btn onClick={() => alert('코스 상세 이동 TODO')}>코스 보러가기</Btn>
+        <Btn onClick={handleClaim}>코스 받기</Btn>
+        <Btn onClick={handleRetry}>코스 다시받기</Btn>
       </S.Wrapper>
     );
   }
