@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, useImperativeHandle, forwardRef } from "react";
+import type { KakaoMapHandle, MapProps } from "@/types/types";
 
 const KakaoMap = forwardRef<KakaoMapHandle, MapProps & { height?: string }>(
   ({ onSelectLocation, center, height = "400px" }, ref) => {

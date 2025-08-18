@@ -52,7 +52,22 @@ export const Group = styled.div`
     row-gap: 1rem;
 `;
 
-export const Course = styled.input`
+export const CourseInput = styled.input`
+    display: flex;
+    align-items: center;
+    border: 0.1rem solid #EDEDED;
+    border-radius: 0.25rem;
+    padding: 0.8rem;
+    font-size: 1rem;
+    resize: none;
+    font-family: 'MiraeroNormal';
+
+    &:focus {
+        outline: none;
+    }
+`;
+
+export const Course = styled.div`
     display: flex;
     align-items: center;
     border: 0.1rem solid #EDEDED;

@@ -17,7 +17,11 @@ export default function useCourse(courseId?: number, userId?: number) {
     const [rating, setRating] = useState<number>(0);
 
     const mapRef = useRef<KakaoMapHandle | null>(null);
-    const inputRefs = { A: useRef<HTMLDivElement>(null), B: useRef<HTMLDivElement>(null) };
+    const inputRefs = { 
+        A: useRef<HTMLInputElement>(null), 
+        B: useRef<HTMLInputElement>(null) 
+    };
+
     const router = useRouter();
     const queryClient = useQueryClient();
 
@@ -85,16 +89,14 @@ export default function useCourse(courseId?: number, userId?: number) {
     const handleSubmitReview = useCallback(() => {
         if (!rating) return alert("별점을 선택해주세요.");
             
-            const tempAuthorId = 3;
-            
-            addReviewMutation.mutate({
-                title: reviewTitle,
-                body: reviewBody,
-                score: rating,
-                author_id: tempAuthorId,
-            });
-        }, [reviewTitle, reviewBody, rating, addReviewMutation]);
-
+        const tempAuthorId = 3;
+        addReviewMutation.mutate({
+            title: reviewTitle,
+            body: reviewBody,
+            score: rating,
+            author_id: tempAuthorId,
+        });
+    }, [reviewTitle, reviewBody, rating, addReviewMutation]);
 
     const handleSelectLocation = useCallback(
         (lat: number, lng: number, address: string) =>
@@ -106,8 +108,8 @@ export default function useCourse(courseId?: number, userId?: number) {
     );
 
     const handleInput = useCallback(
-        (e: React.FormEvent<HTMLDivElement>, course: "A" | "B") => {
-            const address = e.currentTarget.textContent || "";
+        (e: React.ChangeEvent<HTMLInputElement>, course: "A" | "B") => {
+            const address = e.target.value;
             setLocations(prev => ({
                 ...prev,
                 [course]: { ...prev[course], address },

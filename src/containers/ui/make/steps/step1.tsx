@@ -26,14 +26,14 @@ export default function Step1() {
             </S.MyLocationGroup>
             <S.Group>
                 {["A", "B"].map((course) => (
-                    <S.Course
-                    key={course}
-                    type="text"
-                    placeholder="주소를 입력해주세요."
-                    value={locations[course as "A" | "B"]?.address || ""}
-                    onChange={(e) => handleInput(e, course as "A" | "B")}
-                    onClick={() => setSelected(course as "A" | "B")}
-                    ref={inputRefs[course as "A" | "B"]}
+                    <S.CourseInput
+                        key={course}
+                        type="text"
+                        placeholder="주소를 입력해주세요."
+                        value={locations[course as "A" | "B"]?.address || ""}
+                        onChange={(e) => handleInput(e, course as "A" | "B")}
+                        onClick={() => setSelected(course as "A" | "B")}
+                        ref={inputRefs[course as "A" | "B"]}
                     />
                 ))}
                 </S.Group>
