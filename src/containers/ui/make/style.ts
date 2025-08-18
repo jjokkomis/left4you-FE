@@ -52,7 +52,7 @@ export const Group = styled.div`
     row-gap: 1rem;
 `;
 
-export const Course = styled.div`
+export const Course = styled.input`
     display: flex;
     align-items: center;
     border: 0.1rem solid #EDEDED;

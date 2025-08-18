@@ -27,18 +27,16 @@ export default function Step1() {
             <S.Group>
                 {["A", "B"].map((course) => (
                     <S.Course
-                        key={course}
-                        contentEditable
-                        suppressContentEditableWarning
-                        spellCheck={false}
-                        onInput={(e) => handleInput(e, course as "A" | "B")}
-                        onClick={() => setSelected(course as "A" | "B")}
-                        ref={inputRefs[course as "A" | "B"]}
-                    >
-                        {locations[course as "A" | "B"]?.address || "주소를 입력해주세요."}
-                    </S.Course>
+                    key={course}
+                    type="text"
+                    placeholder="주소를 입력해주세요."
+                    value={locations[course as "A" | "B"]?.address || ""}
+                    onChange={(e) => handleInput(e, course as "A" | "B")}
+                    onClick={() => setSelected(course as "A" | "B")}
+                    ref={inputRefs[course as "A" | "B"]}
+                    />
                 ))}
-            </S.Group>
+                </S.Group>
             <Btn onClick={handleSaveData}>위치등록</Btn>
         </S.Container>
     );
