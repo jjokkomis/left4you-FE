@@ -8,7 +8,7 @@ import type { CourseGift, CourseReview } from "@/types/types";
 export default function Setting() {
     const router = useRouter();
     const { courseList, receivedCourses } = useCourse();
-    const courses = Array.isArray(courseList) ? courseList.slice(0, 5) : [];
+    const courses = Array.isArray(courseList) ? courseList.slice(0, 10) : [];
 
     return (
         <S.Container>

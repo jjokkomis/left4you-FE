@@ -7,6 +7,8 @@ export const Container = styled.div`
     width: 100%;
     margin-top: 10%;
     max-width: 400px;
+    overflow-x: hidden;
+    height: auto;
 `;
 
 export const Wrapper = styled.div`

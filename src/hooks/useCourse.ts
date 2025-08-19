@@ -70,7 +70,7 @@ export default function useCourse(courseId?: number, userId?: number) {
     const createMutation = useMutation({
         mutationFn: createCourse,
         onSuccess: () => {
-            alert("코스를 성공적으로 등록했습니다!");
+            alert("코스를 등록하였습니다");
             refetch();
         },
     });
@@ -79,7 +79,7 @@ export default function useCourse(courseId?: number, userId?: number) {
         mutationFn: ({ title, body, score, author_id }: { title: string; body: string; score: number; author_id: number }) =>
             addCourseReview({ course_id: courseId!, title, body, score, author_id }),
         onSuccess: () => {
-            alert("리뷰 작성 완료!");
+            alert("리뷰 작성이 완료되었습니다.");
             router.push("/setting");
             queryClient.invalidateQueries({ queryKey: ["latestReview", courseId] });
             refetchReviews();

@@ -19,7 +19,9 @@ export default function Step1() {
                     onChange={(e) => setCourseName(e.target.value)}
                 />
             </S.Wrapper>
-            <KakaoMap onSelectLocation={handleSelectLocation} ref={mapRef} />
+            <S.MapWrapper>
+                <KakaoMap onSelectLocation={handleSelectLocation} ref={mapRef} />
+            </S.MapWrapper>
             <S.MyLocationGroup>
                 <Image src="/assets/Barrow.svg" alt="화살표 아이콘" width={10} height={10} />
                 {locations[selected]?.address || "위치를 선택해주세요."}

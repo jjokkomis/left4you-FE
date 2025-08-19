@@ -6,6 +6,13 @@ export const Container = styled.div`
     row-gap: 2rem;
     width: 100%;
     max-width: 400px;
+    overflow-x: hidden;
+    height: auto;
+`;
+
+export const MapWrapper = styled.div`
+    width: 100%;
+    height: 70vh;
 `;
 
 export const Wrapper = styled.div`
