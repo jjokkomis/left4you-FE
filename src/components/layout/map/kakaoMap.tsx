@@ -1,14 +1,14 @@
 'use client';
 
 import { useEffect, useRef, useState, useImperativeHandle, forwardRef } from "react";
+import type { KakaoMapHandle, MapProps } from "@/types/types";
 
 const KakaoMap = forwardRef<KakaoMapHandle, MapProps & { height?: string }>(
   ({ onSelectLocation, center, height = "400px" }, ref) => {
-const KakaoMap = forwardRef<KakaoMapHandle, MapProps>(({ onSelectLocation, center, height }, ref) => {
     const mapRef = useRef<HTMLDivElement>(null);
-    const mapInstance = useRef<any>(null);
-    const marker = useRef<any>(null);
-    const geocoder = useRef<any>(null);
+    const mapInstance = useRef<kakao.maps.Map | null>(null);
+    const marker = useRef<kakao.maps.Marker | null>(null);
+    const geocoder = useRef<kakao.maps.services.Geocoder | null>(null);
 
     const [initialCenter, setInitialCenter] = useState<{ lat: number; lng: number } | null>(null);
 
@@ -42,22 +42,22 @@ const KakaoMap = forwardRef<KakaoMapHandle, MapProps>(({ onSelectLocation, cente
         marker.current.setMap(mapInstance.current);
 
         // 지도 클릭 시 위치 선택
-        kakao.maps.event.addListener(mapInstance.current, "click", (mouseEvent: any) => {
+        kakao.maps.event.addListener(mapInstance.current, "click", (mouseEvent: kakao.maps.event.MouseEvent) => {
           const latlng = mouseEvent.latLng;
           const lat = latlng.getLat();
           const lng = latlng.getLng();
 
-          geocoder.current.coord2Address(lng, lat, (result: any, status: string) => {
+          geocoder.current?.coord2Address(lng, lat, (result: any, status: string) => {
             if (status === kakao.maps.services.Status.OK) {
               const address = result[0].address.address_name;
-              marker.current.setPosition(latlng);
+              marker.current?.setPosition(latlng);
               onSelectLocation(lat, lng, address);
             }
           });
         });
 
         // 초기 위치 주소 가져오기
-        geocoder.current.coord2Address(initialCenter.lng, initialCenter.lat, (result: any, status: string) => {
+        geocoder.current?.coord2Address(initialCenter.lng, initialCenter.lat, (result: any, status: string) => {
           if (status === kakao.maps.services.Status.OK) {
             const address = result[0].address.address_name;
             onSelectLocation(initialCenter.lat, initialCenter.lng, address);
@@ -121,7 +121,9 @@ const KakaoMap = forwardRef<KakaoMapHandle, MapProps>(({ onSelectLocation, cente
     }));
 
     return <div ref={mapRef} style={{ width: "100%", height: height, borderRadius: "0.2rem" }} />;
-  });
-});
+  }
+);
+
+KakaoMap.displayName = "KakaoMap";
 
 export default KakaoMap;
