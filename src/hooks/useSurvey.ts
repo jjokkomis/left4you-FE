@@ -3,13 +3,14 @@ import { UseQueryResult, UseMutationResult, useMutation, useQuery } from "@tanst
 import { Survey, SurveySubmission } from "@/types/survey";
 import { useRouter } from "next/navigation";
 
-export function useGetSurvey(): UseQueryResult<Survey, Error> {
+export function useGetSurvey(options?: { enabled?: boolean }): UseQueryResult<Survey, Error> {
     return useQuery<Survey, Error>({
         queryKey: ["getSurvey"],
         queryFn: async () => {
             const res = await getSurvey();
             return res;
         },
+        enabled: options?.enabled,
     })
 }
 
