@@ -76,8 +76,8 @@ export default function useCourse(courseId?: number, userId?: number) {
     });
 
     const addReviewMutation = useMutation({
-        mutationFn: ({ title, body, score, author_id }: { title: string; body: string; score: number; author_id: number }) =>
-            addCourseReview({ course_id: courseId!, title, body, score, author_id }),
+        mutationFn: ({ title, body, score }: { title: string; body: string; score: number }) =>
+            addCourseReview({ course_id: courseId!, title, body, score }),
         onSuccess: () => {
             alert("리뷰 작성이 완료되었습니다.");
             router.push("/setting");
@@ -89,12 +89,10 @@ export default function useCourse(courseId?: number, userId?: number) {
     const handleSubmitReview = useCallback(() => {
         if (!rating) return alert("별점을 선택해주세요.");
             
-        const tempAuthorId = 3;
         addReviewMutation.mutate({
             title: reviewTitle,
             body: reviewBody,
             score: rating,
-            author_id: tempAuthorId,
         });
     }, [reviewTitle, reviewBody, rating, addReviewMutation]);
 
