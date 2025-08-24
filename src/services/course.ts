@@ -6,8 +6,8 @@ const createCourse = async (data: CreateCourse) => {
     return response.data;
 };
 
-async function getCourseList() {
-    const response = await customAxios.get("/course/list");
+async function getCourseList(userId: number) {
+    const response = await customAxios.get(`/course/list?user_id=${userId}`);
     return response.data;
 }
 
@@ -23,9 +23,8 @@ const updateCourse = async (
     return response.data;
 };
 
-export const addCourseReview = async ({course_id, title, body, score, author_id}: { course_id: number; title: string; body: string; score: number; author_id: number }) => 
-    await customAxios.post(`/course/${course_id}`, { title, body, score, author_id });
-
+export const addCourseReview = async ({ course_id, title, body, score, author_id }: { course_id: number; title: string; body: string; score: number; author_id: number }) => 
+    await customAxios.post(`/course/${course_id}`, { title, body, score, user_id: author_id });
 
 export const getCourseById = async (course_id: number) => {
     const response = await customAxios.get(`/course/${course_id}`);

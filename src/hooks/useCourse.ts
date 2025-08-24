@@ -32,22 +32,23 @@ export default function useCourse(courseId?: number) {
     }, [userId]);
 
     const { data, isLoading, error, refetch } = useQuery({
-        queryKey: ["courseList"],
-        queryFn: getCourseList,
+        queryKey: ["courseList", userId],
+        queryFn: () => userId ? getCourseList(userId) : Promise.resolve([]),
+        enabled: !!userId,
         staleTime: 0,
     });
-    const courseList = Array.isArray(data) ? data : data?.courses || [];
+    const courseList = Array.isArray(data) ? data : data?.courses ?? [];
 
     const { data: courseDetail, isLoading: isDetailLoading } = useQuery({
-        queryKey: ["courseDetail", courseId],
-        queryFn: () => getCourseById(courseId!),
-        enabled: !!courseId,
+        queryKey: ["courseDetail", courseId, userId],
+        queryFn: () => (courseId && userId ? getCourseById(courseId, userId) : Promise.resolve(null)),
+        enabled: !!courseId && !!userId,
     });
 
     const { data: reviews, isLoading: isReviewLoading, refetch: refetchReviews } = useQuery({
-        queryKey: ["courseReviews", courseId],
-        queryFn: () => getAllReview(courseId!),
-        enabled: !!courseId,
+        queryKey: ["courseReviews", courseId, userId],
+        queryFn: () => (courseId && userId ? getAllReview(courseId, userId) : Promise.resolve([])),
+        enabled: !!courseId && !!userId,
     });
 
     const { data: latestReview } = useQuery({
@@ -69,7 +70,7 @@ export default function useCourse(courseId?: number) {
     }, [latestReview, courseDetail]);
 
     const createMutation = useMutation({
-        mutationFn: createCourse,
+        mutationFn: (data: { maker_id: number; name: string; content: string; rating: number; place_name: string; latitude: number; longitude: number }) => createCourse(data),
         onSuccess: () => {
             alert("코스를 등록하였습니다");
             refetch();
@@ -77,9 +78,10 @@ export default function useCourse(courseId?: number) {
     });
 
     const addReviewMutation = useMutation({
-        mutationFn: ({ title, body, score }: { title: string; body: string; score: number }) => {
+        mutationFn: async ({ title, body, score }: { title: string; body: string; score: number }) => {
             if (!userId) throw new Error("사용자 정보가 없습니다.");
-            return addCourseReview({ course_id: courseId!, title, body, score, author_id: userId });
+            if (!courseId) throw new Error("코스 정보가 없습니다.");
+            return addCourseReview({ course_id: courseId, title, body, score, author_id: userId });
         },
         onSuccess: () => {
             alert("리뷰 작성이 완료되었습니다.");
@@ -97,7 +99,7 @@ export default function useCourse(courseId?: number) {
             body: reviewBody,
             score: rating,
         });
-    }, [reviewTitle, reviewBody, rating, addReviewMutation, userId]);
+    }, [reviewTitle, reviewBody, rating, addReviewMutation, userId, courseId]);
 
     const handleSelectLocation = useCallback(
         (lat: number, lng: number, address: string) =>
@@ -121,11 +123,12 @@ export default function useCourse(courseId?: number) {
     );
 
     const handleSaveData = useCallback(() => {
+        if (!userId) return alert("사용자 정보가 없습니다.");
         const loc = locations[selected];
         if (!courseName || !loc?.address || !loc?.coord) return alert("코스명과 위치를 입력해주세요.");
         const { latitude, longitude } = loc.coord;
         createMutation.mutate({
-            maker_id: userId || 2,
+            maker_id: userId,
             name: courseName,
             content: "",
             rating: 2,

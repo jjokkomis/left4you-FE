@@ -3,7 +3,6 @@
 import * as S from './style';
 import { useRouter } from 'next/navigation';
 import useCourse from "@/hooks/useCourse";
-import { useUserStore } from "@/store/useUserStore";
 import type { CourseGift, CourseReview } from "@/types/types";
 
 export default function Setting() {
@@ -12,9 +11,6 @@ export default function Setting() {
     const courses = Array.isArray(courseList) ? courseList.slice(0, 10) : [];
 
     const gifts = Array.isArray(receivedCourses) ? receivedCourses : [];
-
-    const user = useUserStore((state) => state.user);
-    console.log("현재 로그인 유저:", user);
 
     return (
         <S.Container>
