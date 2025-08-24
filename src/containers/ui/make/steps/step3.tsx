@@ -13,9 +13,10 @@ export default function Step3() {
     if (error || !courseList || courseList.length === 0)
         return <S.Loading>에러 발생 또는 코스 없음</S.Loading>;
 
-    const course = courseList[0];
-    const firstPlace = course.places?.[0];
-    const lastPlace = course.places?.slice(-1)[0];
+    const course = courseList?.[0];
+    const places = course?.places ?? [];
+    const firstPlace = places[0] ?? { place_name: "출발지" };
+    const lastPlace = places[places.length - 1] ?? { place_name: "도착지" };
 
     const handleSaveAndRedirect = () => {
         alert("저장이 성공적으로 완료되었습니다.");
@@ -30,9 +31,9 @@ export default function Step3() {
 
             <S.Map>
                 <S.Overlay>
-                    <S.CourseTitle>{course.name || "코스 이름 없음"}</S.CourseTitle>
+                    <S.CourseTitle>{course?.name || "코스 이름 없음"}</S.CourseTitle>
                     <S.Location>
-                        📍 {firstPlace?.place_name || "출발지"} ~ {lastPlace?.place_name || "도착지"}
+                        📍 {firstPlace.place_name} ~ {lastPlace.place_name}
                     </S.Location>
                 </S.Overlay>
             </S.Map>
@@ -40,7 +41,7 @@ export default function Step3() {
             <S.Wrapper>
                 <S.Title>코스 이름</S.Title>
                 <S.Box>
-                    <div>{course.name || "코스 이름 없음"}</div>
+                    <div>{course?.name || "코스 이름 없음"}</div>
                 </S.Box>
             </S.Wrapper>
 

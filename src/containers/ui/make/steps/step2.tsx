@@ -11,16 +11,17 @@ export default function Step2() {
     if (error || !courseList || courseList.length === 0)
         return <S.Loading>에러 발생 또는 코스 없음</S.Loading>;
 
-    const course = courseList[0];
-    const firstPlace = course.places?.[0];
-    const coord = { lat: firstPlace?.latitude ?? course.latitude ?? 0, lng: firstPlace?.longitude ?? course.longitude ?? 0 };
+    const course = courseList?.[0];
+    const places = course?.places ?? [];
+    const firstPlace = places[0] ?? { latitude: course?.latitude ?? 0, longitude: course?.longitude ?? 0 };
+    const coord = { lat: firstPlace.latitude, lng: firstPlace.longitude };
 
     return (
         <S.Container>
             <S.Wrapper>
                 <S.Title>코스 미리보기</S.Title>
                 <S.Pack>
-                    <S.PreviewTitle>{course.name || "코스 이름 없음"}</S.PreviewTitle>
+                    <S.PreviewTitle>{course?.name || "코스 이름 없음"}</S.PreviewTitle>
                     <S.Name>익명</S.Name>
                 </S.Pack>
             </S.Wrapper>
@@ -28,8 +29,8 @@ export default function Step2() {
             <KakaoMap center={coord} onSelectLocation={() => {}} />
 
             <S.Group>
-                {course.places?.length > 0 ? (
-                    course.places.map((place, index) => (
+                {places.length > 0 ? (
+                    places.map((place, index) => (
                         <S.Course key={index}>
                             위치 {String.fromCharCode(65 + index)} (
                             {(place.latitude ?? 0).toFixed(4)}, {(place.longitude ?? 0).toFixed(4)}) -{" "}
