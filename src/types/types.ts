@@ -3,40 +3,27 @@ export interface StepProps {
     onNext: () => void;
     onPrev: () => void;
 }
+
 export interface KakaoMapHandle {
     moveToAddress: (address: string) => void;
     moveToLatLng: (lat: number, lng: number) => void;
 }
+
 export interface MapProps {
     onSelectLocation: (lat: number, lng: number, address: string) => void;
     center?: { lat: number; lng: number };
+    height?: number | string;
 }
 
 export interface LocationState {
     address: string;
-    coord: {
-        latitude: number;
-        longitude: number;
-    } | null;
+    coord: { latitude: number; longitude: number } | null;
 }
 
 export type Location = {
     address: string;
-    coord: {
-        lat: number | null;
-        lng: number | null;
-    };
+    coord: { lat: number | null; lng: number | null };
 };
-
-export interface CreateCourse {
-    maker_id: string;
-    name: string;
-    content: string;
-    rating: number;
-    place_name: string;
-    latitude: number;
-    longitude: number;
-}
 
 export interface Response {
     success: boolean;
@@ -51,20 +38,21 @@ export type CourseData = {
     longitude?: number;
 };
 
-
 export interface BtnProps {
     children: React.ReactNode;
     onClick?: () => void;
 }
 
 export interface CreateCourse {
-    maker_id: string;
+    maker_id: number;
     name: string;
     content: string;
     rating: number;
+    place_name: string;
+    latitude: number;
+    longitude: number;
 }
 
-// store/course.ts
 export interface CourseState {
     courses: Course[];
     selectedCourse: Course | null;
@@ -78,9 +66,7 @@ export interface Course {
     id: number;
     maker_id: string;
     name: string;
-    content: {
-        locations: Location[];
-    };
+    content: { locations: Location[] };
     rating: number;
 }
 
@@ -97,4 +83,44 @@ export interface CoursePayload {
         latitude: number;
         longitude: number;
     };
+}
+
+export interface CourseReview {
+    id: number;
+    name: string;
+}
+
+export interface UpdateCourse {
+    course_id: number;
+    title: string;
+    body: string;
+    rating: number;
+}
+
+export interface CourseGift {
+    id: number;
+    course_id: number;
+    course_name: string;
+    recipient_id: number;
+}
+
+export interface ResponseGift<T = CourseGift[]> {
+    success: boolean;
+    courses: T;
+}
+
+export interface UpdateCourseRequest {
+    title: string;
+    body: string;
+    score: number;
+}
+
+export interface AddReviewRequest {
+    id: number;
+    course_id: number;
+    title: string;
+    body: string;
+    score: number;
+    created_at: string;
+    author_id: number;
 }
