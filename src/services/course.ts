@@ -23,11 +23,9 @@ const updateCourse = async (
     return response.data;
 };
 
-export const addCourseReview = async ({ course_id, title, body, score, author_id }: { course_id: number; title: string; body: string; score: number, author_id: number}) => {
-    const response = await customAxios.post(`/course/${course_id}`, {
-        title, body, score, author_id });
-    return response.data;
-};
+export const addCourseReview = async ({course_id, title, body, score, author_id}: { course_id: number; title: string; body: string; score: number; author_id: number }) => 
+    await customAxios.post(`/course/${course_id}`, { title, body, score, author_id });
+
 
 export const getCourseById = async (course_id: number) => {
     const response = await customAxios.get(`/course/${course_id}`);
@@ -39,8 +37,8 @@ export const getAllReview = async (course_id: number) => {
     return response.data;
 };
 
-export const getLastReview = async (course_id: number) => {
-    const response = await customAxios.get(`/course/${course_id}/reviews/latest`);
+export const getLastReview = async (course_id: number, user_id: number) => {
+    const response = await customAxios.get(`/course/${course_id}/reviews/latest`, { params: { user_id } });
     return response.data;
 };
 

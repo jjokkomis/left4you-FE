@@ -3,10 +3,12 @@ export interface StepProps {
     onNext: () => void;
     onPrev: () => void;
 }
+
 export interface KakaoMapHandle {
     moveToAddress: (address: string) => void;
     moveToLatLng: (lat: number, lng: number) => void;
 }
+
 export interface MapProps {
     onSelectLocation: (lat: number, lng: number, address: string) => void;
     center?: { lat: number; lng: number };
@@ -15,18 +17,12 @@ export interface MapProps {
 
 export interface LocationState {
     address: string;
-    coord: {
-        latitude: number;
-        longitude: number;
-    } | null;
+    coord: { latitude: number; longitude: number } | null;
 }
 
 export type Location = {
     address: string;
-    coord: {
-        lat: number | null;
-        lng: number | null;
-    };
+    coord: { lat: number | null; lng: number | null };
 };
 
 export interface Response {
@@ -41,7 +37,6 @@ export type CourseData = {
     latitude?: number;
     longitude?: number;
 };
-
 
 export interface BtnProps {
     children: React.ReactNode;
@@ -58,7 +53,6 @@ export interface CreateCourse {
     longitude: number;
 }
 
-// store/course.ts
 export interface CourseState {
     courses: Course[];
     selectedCourse: Course | null;
@@ -72,9 +66,7 @@ export interface Course {
     id: number;
     maker_id: string;
     name: string;
-    content: {
-        locations: Location[];
-    };
+    content: { locations: Location[] };
     rating: number;
 }
 
@@ -105,22 +97,16 @@ export interface UpdateCourse {
     rating: number;
 }
 
-export interface CourseGift{
+export interface CourseGift {
     id: number;
     course_id: number;
     course_name: string;
     recipient_id: number;
-};
+}
 
 export interface ResponseGift<T = CourseGift[]> {
     success: boolean;
     courses: T;
-}
-
-export interface UpdateCourseRequest {
-    title: string;
-    body: string;
-    score: number;
 }
 
 export interface UpdateCourseRequest {

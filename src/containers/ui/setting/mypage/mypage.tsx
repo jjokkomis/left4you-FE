@@ -11,6 +11,8 @@ export default function Setting() {
     const { courseList, receivedCourses } = useCourse();
     const courses = Array.isArray(courseList) ? courseList.slice(0, 10) : [];
 
+    const gifts = Array.isArray(receivedCourses) ? receivedCourses : [];
+
     const user = useUserStore((state) => state.user);
     console.log("현재 로그인 유저:", user);
 
@@ -30,14 +32,18 @@ export default function Setting() {
             </S.Wrapper>
             <S.Wrapper>
                 <S.SubTitle>이때동안 선물 받은 코스</S.SubTitle>
-                {receivedCourses.map((course: CourseGift) => (
-                    <S.Box
-                        key={course.gift_id}
-                        onClick={() => router.push(`/review/${course.course_id}`)}
-                    >
-                        <S.CourseName>{course.course_name}</S.CourseName>
-                    </S.Box>
-                ))}
+                {gifts.length > 0 ? (
+                    gifts.map((course: CourseGift) => (
+                        <S.Box
+                            key={course.gift_id}
+                            onClick={() => router.push(`/review/${course.course_id}`)}
+                        >
+                            <S.CourseName>{course.course_name}</S.CourseName>
+                        </S.Box>
+                    ))
+                ) : (
+                    <p>받은 코스가 없습니다.</p>
+                )}
             </S.Wrapper>
         </S.Container>
     );

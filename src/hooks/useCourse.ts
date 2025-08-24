@@ -3,8 +3,9 @@ import { useRouter } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { KakaoMapHandle, LocationState, CourseGift } from "@/types/types";
 import { createCourse, getCourseList, getCourseById, addCourseReview, getAllReview, getLastReview } from "@/services/course";
+import { useUserStore } from "@/store/useUserStore";
 
-export default function useCourse(courseId?: number, userId?: number) {
+export default function useCourse(courseId?: number) {
     const [courseName, setCourseName] = useState("");
     const [selected, setSelected] = useState<"A" | "B">("A");
     const [locations, setLocations] = useState<{ A: LocationState; B: LocationState }>({
@@ -17,13 +18,13 @@ export default function useCourse(courseId?: number, userId?: number) {
     const [rating, setRating] = useState<number>(0);
 
     const mapRef = useRef<KakaoMapHandle | null>(null);
-    const inputRefs = { 
-        A: useRef<HTMLInputElement>(null), 
-        B: useRef<HTMLInputElement>(null) 
-    };
+    const inputRefs = { A: useRef<HTMLInputElement>(null), B: useRef<HTMLInputElement>(null) };
 
     const router = useRouter();
     const queryClient = useQueryClient();
+
+    const user = useUserStore((state) => state.user);
+    const userId = user?.id;
 
     useEffect(() => {
         if (!userId) return;
@@ -50,9 +51,9 @@ export default function useCourse(courseId?: number, userId?: number) {
     });
 
     const { data: latestReview } = useQuery({
-        queryKey: ["latestReview", courseId],
-        queryFn: () => getLastReview(courseId!),
-        enabled: !!courseId,
+        queryKey: ["latestReview", courseId, userId],
+        queryFn: () => (courseId && userId ? getLastReview(courseId, userId) : Promise.resolve(null)),
+        enabled: !!courseId && !!userId,
     });
 
     useEffect(() => {
@@ -76,25 +77,27 @@ export default function useCourse(courseId?: number, userId?: number) {
     });
 
     const addReviewMutation = useMutation({
-        mutationFn: ({ title, body, score }: { title: string; body: string; score: number }) =>
-            addCourseReview({ course_id: courseId!, title, body, score }),
+        mutationFn: ({ title, body, score }: { title: string; body: string; score: number }) => {
+            if (!userId) throw new Error("사용자 정보가 없습니다.");
+            return addCourseReview({ course_id: courseId!, title, body, score, author_id: userId });
+        },
         onSuccess: () => {
             alert("리뷰 작성이 완료되었습니다.");
             router.push("/setting");
-            queryClient.invalidateQueries({ queryKey: ["latestReview", courseId] });
+            queryClient.invalidateQueries({ queryKey: ["latestReview", courseId, userId] });
             refetchReviews();
         },
     });
 
     const handleSubmitReview = useCallback(() => {
+        if (!userId) return alert("사용자 정보가 없습니다.");
         if (!rating) return alert("별점을 선택해주세요.");
-            
         addReviewMutation.mutate({
             title: reviewTitle,
             body: reviewBody,
             score: rating,
         });
-    }, [reviewTitle, reviewBody, rating, addReviewMutation]);
+    }, [reviewTitle, reviewBody, rating, addReviewMutation, userId]);
 
     const handleSelectLocation = useCallback(
         (lat: number, lng: number, address: string) =>
@@ -120,7 +123,6 @@ export default function useCourse(courseId?: number, userId?: number) {
     const handleSaveData = useCallback(() => {
         const loc = locations[selected];
         if (!courseName || !loc?.address || !loc?.coord) return alert("코스명과 위치를 입력해주세요.");
-
         const { latitude, longitude } = loc.coord;
         createMutation.mutate({
             maker_id: userId || 2,
