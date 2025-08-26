@@ -138,6 +138,15 @@ export default function useCourse(courseId?: number) {
         });
     }, [courseName, selected, locations, createMutation, userId]);
 
+    const isCourseAccessible = useCallback(
+        (id: number) => {
+            const myCourseIds = courseList.map(c => c.id);
+            const receivedCourseIds = receivedCourses.map(c => c.course_id);
+            return myCourseIds.includes(id) || receivedCourseIds.includes(id);
+        },
+        [courseList, receivedCourses]
+    );
+
     return {
         courseName, setCourseName,
         selected, setSelected,
@@ -153,5 +162,6 @@ export default function useCourse(courseId?: number) {
         reviewBody, setReviewBody,
         rating, setRating,
         handleSubmitReview, receivedCourses, refetchReviews,
+        isCourseAccessible,
     };
 }
