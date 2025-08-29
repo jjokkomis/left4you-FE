@@ -9,20 +9,15 @@ export default function ReviewPage() {
   const params = useParams<{ id: string }>();
   const reviewId = Number(params.id);
   const router = useRouter();
-  const { isLoading, courseList, receivedCourses } = useCourse();
-
-  const isCourseAccessible = (id: number) => {
-    const myCourseIds = courseList.map(c => c.id);
-    const giftCourseIds = receivedCourses.map(g => g.course_id);
-    return myCourseIds.includes(id) || giftCourseIds.includes(id);
-  };
+  
+  const { isLoading, isCourseAccessible } = useCourse();
 
   useEffect(() => {
     if (!isLoading && !isCourseAccessible(reviewId)) {
       alert("접근할 수 없는 코스입니다.");
       router.replace("/setting");
     }
-  }, [reviewId, isLoading, courseList, receivedCourses, router]);
+  }, [reviewId, isLoading, isCourseAccessible, router]);
 
   if (isLoading) return <div>로딩 중...</div>;
   if (!isCourseAccessible(reviewId)) return null;
