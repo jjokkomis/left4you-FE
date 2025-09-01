@@ -19,26 +19,26 @@ export default function Step1() {
                     onChange={(e) => setCourseName(e.target.value)}
                 />
             </S.Wrapper>
-            <KakaoMap onSelectLocation={handleSelectLocation} ref={mapRef} />
+            <S.MapWrapper>
+                <KakaoMap onSelectLocation={handleSelectLocation} ref={mapRef} />
+            </S.MapWrapper>
             <S.MyLocationGroup>
                 <Image src="/assets/Barrow.svg" alt="화살표 아이콘" width={10} height={10} />
                 {locations[selected]?.address || "위치를 선택해주세요."}
             </S.MyLocationGroup>
             <S.Group>
                 {["A", "B"].map((course) => (
-                    <S.Course
+                    <S.CourseInput
                         key={course}
-                        contentEditable
-                        suppressContentEditableWarning
-                        spellCheck={false}
-                        onInput={(e) => handleInput(e, course as "A" | "B")}
+                        type="text"
+                        placeholder="주소를 입력해주세요."
+                        value={locations[course as "A" | "B"]?.address || ""}
+                        onChange={(e) => handleInput(e, course as "A" | "B")}
                         onClick={() => setSelected(course as "A" | "B")}
                         ref={inputRefs[course as "A" | "B"]}
-                    >
-                        {locations[course as "A" | "B"]?.address || "주소를 입력해주세요."}
-                    </S.Course>
+                    />
                 ))}
-            </S.Group>
+                </S.Group>
             <Btn onClick={handleSaveData}>위치등록</Btn>
         </S.Container>
     );

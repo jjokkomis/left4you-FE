@@ -6,6 +6,13 @@ export const Container = styled.div`
     row-gap: 2rem;
     width: 100%;
     max-width: 400px;
+    overflow-x: hidden;
+    height: auto;
+`;
+
+export const MapWrapper = styled.div`
+    width: 100%;
+    height: 70vh;
 `;
 
 export const Wrapper = styled.div`
@@ -50,6 +57,21 @@ export const Group = styled.div`
     display: flex;
     flex-direction: column;
     row-gap: 1rem;
+`;
+
+export const CourseInput = styled.input`
+    display: flex;
+    align-items: center;
+    border: 0.1rem solid #EDEDED;
+    border-radius: 0.25rem;
+    padding: 0.8rem;
+    font-size: 1rem;
+    resize: none;
+    font-family: 'MiraeroNormal';
+
+    &:focus {
+        outline: none;
+    }
 `;
 
 export const Course = styled.div`
