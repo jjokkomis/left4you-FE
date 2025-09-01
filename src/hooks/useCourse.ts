@@ -141,7 +141,9 @@ export default function useCourse(courseId?: number) {
     const isCourseAccessible = useCallback(
         (id: number) => {
             const myCourseIds = courseList.map(c => c.id);
-            const receivedCourseIds = receivedCourses.map(c => c.course_id);
+            const receivedCourseIds = Array.isArray(receivedCourses)
+                ? receivedCourses.map(c => c.course_id)
+                : [];
             return myCourseIds.includes(id) || receivedCourseIds.includes(id);
         },
         [courseList, receivedCourses]
