@@ -42,7 +42,7 @@ export const getLastReview = async (course_id: number, user_id: number) => {
 };
 
 export const getMyGifts = async () => {
-    const response = await customAxios.get(`/gifts`);
+    const response = await customAxios.get(`/receive/gifts`);
     return response.data;
 };
 
