@@ -7,6 +7,36 @@ import { useUserStore } from "@/store/useUserStore";
 import { jwtDecode } from "jwt-decode";
 import type { JwtPayload } from "@/types/auth";
 
+async function fetchTourItem() {
+    const TOUR_API_KEY = process.env.NEXT_PUBLIC_TOUR_API_KEY;
+    const url = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList";
+
+    const params = new URLSearchParams({
+        ServiceKey: TOUR_API_KEY || "",
+        MobileOS: "ETC",
+        MobileApp: "GiftTrip",
+        _type: "json",
+        areaCode: "8",
+        sigunguCode: "1",
+        contentTypeId: "12",
+        numOfRows: "1",
+    });
+
+    try {
+        const resp = await fetch(`${url}?${params.toString()}`);
+        if (!resp.ok) throw new Error("Tour API 요청 실패");
+
+        const data = await resp.json();
+        const tourItem = data?.response?.body?.items?.item ?? {};
+
+        console.log("반환 데이터:", tourItem);
+        return tourItem;
+    } catch (error) {
+        console.error( error);
+        return {};
+    }
+}
+
 export default function useCourse(courseId?: number) {
     const [courseName, setCourseName] = useState("");
     const [selected, setSelected] = useState<"A" | "B">("A");
@@ -26,7 +56,6 @@ export default function useCourse(courseId?: number) {
     const queryClient = useQueryClient();
 
     const user = useUserStore((state) => state.user);
-    // 토큰에서 userId 복구 (스토어 하이드레이션 지연 대비)
     const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
     const decodedUserId = useMemo(() => {
         if (!token) return undefined;
@@ -38,7 +67,6 @@ export default function useCourse(courseId?: number) {
     }, [token]);
     const userId = user?.id ?? decodedUserId;
 
-    // 내가 받은 코스 목록 (토큰 기반)
     const { data: gifts, isLoading: isGiftsLoading } = useQuery<CourseGift[], Error>({
         queryKey: ["myGifts"],
         queryFn: async () => {
@@ -91,7 +119,13 @@ export default function useCourse(courseId?: number) {
     }, [latestReview, courseDetail]);
 
     const createMutation = useMutation({
-        mutationFn: (data: { maker_id: number; name: string; content: string; rating: number; place_name: string; latitude: number; longitude: number }) => createCourse(data),
+        mutationFn: async (data: { maker_id: number; name: string; content: string; rating: number; place_name: string; latitude: number; longitude: number }) => {
+            const tourItem = await fetchTourItem();
+            return createCourse({
+                ...data,
+                content: JSON.stringify(tourItem),
+            });
+        },
         onSuccess: () => {
             alert("코스를 등록하였습니다");
             refetch();
@@ -159,7 +193,6 @@ export default function useCourse(courseId?: number) {
         });
     }, [courseName, selected, locations, createMutation, userId]);
 
-    // 접근 가능 여부
     const isCourseAccessible = useCallback(
         (id: number): boolean => {
             const myCourseIds = (courseList as Array<{ id: number }>).map((c) => c.id);
