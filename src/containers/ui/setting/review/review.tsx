@@ -11,9 +11,19 @@ export default function ReviewPage() {
     const { id } = useParams<{ id: string }>();
     const courseId = Number(id);
 
-    const { courseDetail, isDetailLoading, reviewTitle, setReviewTitle, reviewBody, setReviewBody, rating, setRating, handleSubmitReview } = useCourse(courseId);
+    const { courseDetail, isDetailLoading, reviewTitle, setReviewTitle, reviewBody, setReviewBody, rating, setRating, handleSubmitReview, canAccessCurrentCourse, isAccessChecking } = useCourse(courseId);
 
-    if (isDetailLoading) return <div>로딩 중...</div>;
+    if (isDetailLoading || isAccessChecking) return <div>로딩 중...</div>;
+
+    if (!canAccessCurrentCourse) {
+        // 접근 권한 없음: 안내 후 홈으로 이동
+        if (typeof window !== "undefined") {
+            alert("이 코스에 접근할 권한이 없습니다.");
+            router.back();
+        }
+        return null;
+    }
+
     if (!courseDetail?.course) return <div>코스를 불러오지 못했습니다.</div>;
 
     return (
