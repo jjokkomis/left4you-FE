@@ -1,9 +1,11 @@
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { KakaoMapHandle, LocationState, CourseGift } from "@/types/types";
-import { createCourse, getCourseList, getCourseById, addCourseReview, getAllReview, getLastReview } from "@/services/course";
+import { createCourse, getCourseList, getCourseById, addCourseReview, getAllReview, getLastReview, getMyGifts } from "@/services/course";
 import { useUserStore } from "@/store/useUserStore";
+import { jwtDecode } from "jwt-decode";
+import type { JwtPayload } from "@/types/auth";
 
 export default function useCourse(courseId?: number) {
     const [courseName, setCourseName] = useState("");
@@ -24,16 +26,35 @@ export default function useCourse(courseId?: number) {
     const queryClient = useQueryClient();
 
     const user = useUserStore((state) => state.user);
-    const userId = user?.id;
+    // 토큰에서 userId 복구 (스토어 하이드레이션 지연 대비)
+    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    const decodedUserId = useMemo(() => {
+        if (!token) return undefined;
+        try {
+            return jwtDecode<JwtPayload>(token).user_id;
+        } catch {
+            return undefined;
+        }
+    }, [token]);
+    const userId = user?.id ?? decodedUserId;
+
+    // 내가 받은 코스 목록 (토큰 기반)
+    const { data: gifts, isLoading: isGiftsLoading } = useQuery<CourseGift[], Error>({
+        queryKey: ["myGifts"],
+        queryFn: async () => {
+            const res = await getMyGifts();
+            return Array.isArray(res) ? res : [];
+        },
+        enabled: !!token,
+    });
 
     useEffect(() => {
-        if (!userId) return;
-        getAllReview(userId).then(gifts => setReceivedCourses(gifts || []));
-    }, [userId]);
+        if (Array.isArray(gifts)) setReceivedCourses(gifts);
+    }, [gifts]);
 
     const { data, isLoading, error, refetch } = useQuery({
         queryKey: ["courseList", userId],
-        queryFn: () => userId ? getCourseList(userId) : Promise.resolve([]),
+        queryFn: () => (userId ? getCourseList(userId) : Promise.resolve([])),
         enabled: !!userId,
         staleTime: 0,
     });
@@ -41,13 +62,13 @@ export default function useCourse(courseId?: number) {
 
     const { data: courseDetail, isLoading: isDetailLoading } = useQuery({
         queryKey: ["courseDetail", courseId, userId],
-        queryFn: () => (courseId && userId ? getCourseById(courseId, userId) : Promise.resolve(null)),
-        enabled: !!courseId && !!userId,
+        queryFn: () => (courseId ? getCourseById(courseId) : Promise.resolve(null)),
+        enabled: !!courseId,
     });
 
     const { data: reviews, isLoading: isReviewLoading, refetch: refetchReviews } = useQuery({
         queryKey: ["courseReviews", courseId, userId],
-        queryFn: () => (courseId && userId ? getAllReview(courseId, userId) : Promise.resolve([])),
+        queryFn: () => (courseId && userId ? getAllReview(courseId) : Promise.resolve([])),
         enabled: !!courseId && !!userId,
     });
 
@@ -138,16 +159,19 @@ export default function useCourse(courseId?: number) {
         });
     }, [courseName, selected, locations, createMutation, userId]);
 
+    // 접근 가능 여부
     const isCourseAccessible = useCallback(
-        (id: number) => {
-            const myCourseIds = courseList.map(c => c.id);
-            const receivedCourseIds = Array.isArray(receivedCourses)
-                ? receivedCourses.map(c => c.course_id)
+        (id: number): boolean => {
+            const myCourseIds = (courseList as Array<{ id: number }>).map((c) => c.id);
+            const receivedCourseIds = Array.isArray(gifts)
+                ? (gifts as Array<{ course_id: number }>).map((c) => c.course_id)
                 : [];
             return myCourseIds.includes(id) || receivedCourseIds.includes(id);
         },
-        [courseList, receivedCourses]
+        [courseList, gifts]
     );
+
+    const canAccessCurrentCourse = courseId ? isCourseAccessible(courseId) : true;
 
     return {
         courseName, setCourseName,
@@ -163,7 +187,9 @@ export default function useCourse(courseId?: number) {
         addReviewMutation, reviewTitle, setReviewTitle,
         reviewBody, setReviewBody,
         rating, setRating,
-        handleSubmitReview, receivedCourses, refetchReviews,
+        handleSubmitReview, receivedCourses: Array.isArray(gifts) ? gifts : [],
         isCourseAccessible,
+        canAccessCurrentCourse,
+        isAccessChecking: isLoading || isGiftsLoading,
     };
 }
