@@ -23,6 +23,7 @@ export const Wrapper = styled.div`
 
 export const Title = styled.div`
     font-size: 1.25rem;
+    margin-bottom: 1rem;
 `;
 
 export const CourseName = styled.textarea`
@@ -172,4 +173,49 @@ export const Loading = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+`;
+
+export const TourListWrapper = styled.div`
+    margin-top: 2rem;
+    row-gap: 1rem;
+
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    li {
+        margin-bottom: 0.5rem;
+        padding: 0.5rem;
+        background-color: #f9f9f9;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    li:hover {
+        background-color: #e0e0e0;
+    }
+`;
+
+export const ButtonGroup = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+`;
+
+export const ToggleBtn = styled.button`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    padding: 1rem;
+    border: none;
+    background-color: transparent;
+    color: #364155;
+    border: 1px solid #364155;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    cursor: pointer;
 `;
