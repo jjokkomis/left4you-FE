@@ -65,8 +65,8 @@ export default function Step1() {
             {showTourList && (
                 <S.TourListWrapper>
                     <S.Title>추천 관광지</S.Title>
-                    {isLoading && <p>불러오는 중...</p>}
-                    {isError && <p>관광지 데이터를 불러오는데 실패했어요.</p>}
+                    {isLoading && <S.Sub>불러오는 중...</S.Sub>}
+                    {isError && <S.Sub>관광지 데이터를 불러오는데 실패했어요.</S.Sub>}
                     {!isLoading && !isError && tourItems?.length > 0 && (
                         <ul>
                             {tourItems.map((item: any) => (

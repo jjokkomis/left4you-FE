@@ -23,7 +23,6 @@ export const Wrapper = styled.div`
 
 export const Title = styled.div`
     font-size: 1.25rem;
-    margin-bottom: 1rem;
 `;
 
 export const CourseName = styled.textarea`
@@ -73,6 +72,11 @@ export const CourseInput = styled.input`
     &:focus {
         outline: none;
     }
+`;
+
+export const Sub = styled.div`
+    font-size: 1rem;
+    margin-top: 1rem;
 `;
 
 export const Course = styled.div`
@@ -178,6 +182,7 @@ export const Loading = styled.div`
 export const TourListWrapper = styled.div`
     margin-top: 2rem;
     row-gap: 1rem;
+    
 
     ul {
         list-style: none;
