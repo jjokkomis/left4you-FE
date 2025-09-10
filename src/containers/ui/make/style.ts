@@ -191,9 +191,10 @@ export const TourListWrapper = styled.div`
 
     li {
         margin-bottom: 0.5rem;
-        padding: 0.5rem;
+        margin-top: 1rem;
+        padding: 0.8rem;
         background-color: #f9f9f9;
-        border-radius: 4px;
+        border-radius: 0.25rem;
         cursor: pointer;
     }
 
