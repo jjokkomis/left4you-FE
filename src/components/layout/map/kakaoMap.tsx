@@ -3,12 +3,13 @@
 import { useEffect, useRef, useState, useImperativeHandle, forwardRef } from "react";
 import type { KakaoMapHandle, MapProps } from "@/types/types";
 
-const KakaoMap = forwardRef<KakaoMapHandle, MapProps & { height?: string }>(
-  ({ onSelectLocation, center, height = "400px" }, ref) => {
+const KakaoMap = forwardRef<KakaoMapHandle, MapProps & { height?: string; tourItems?: any[] }>(
+  ({ onSelectLocation, center, height = "400px", tourItems = [] }, ref) => {
     const mapRef = useRef<HTMLDivElement>(null);
     const mapInstance = useRef<kakao.maps.Map | null>(null);
     const marker = useRef<kakao.maps.Marker | null>(null);
     const geocoder = useRef<kakao.maps.services.Geocoder | null>(null);
+    const tourMarkers = useRef<kakao.maps.Marker[]>([]);
 
     const [initialCenter, setInitialCenter] = useState<{ lat: number; lng: number } | null>(null);
 
@@ -85,6 +86,35 @@ const KakaoMap = forwardRef<KakaoMapHandle, MapProps & { height?: string }>(
         marker.current.setPosition(moveLatLng);
       }
     }, [center]);
+
+    // 관광지 마커 표시
+    useEffect(() => {
+      if (!mapInstance.current) return;
+
+      const { kakao } = window as any;
+
+      // 기존 관광지 마커 제거
+      tourMarkers.current.forEach((m) => m.setMap(null));
+      tourMarkers.current = [];
+
+      if (tourItems && tourItems.length > 0) {
+        tourItems.forEach((item: any) => {
+          if (item.mapy && item.mapx) {
+            const position = new kakao.maps.LatLng(item.mapy, item.mapx);
+            const m = new kakao.maps.Marker({ position });
+            m.setMap(mapInstance.current);
+            tourMarkers.current.push(m);
+
+            const iw = new kakao.maps.InfoWindow({
+              content: `<div style="padding:5px;font-size:12px;">${item.title}</div>`,
+            });
+
+            kakao.maps.event.addListener(m, "mouseover", () => iw.open(mapInstance.current, m));
+            kakao.maps.event.addListener(m, "mouseout", () => iw.close());
+          }
+        });
+      }
+    }, [tourItems]);
 
     // 외부 제어 메서드
     useImperativeHandle(ref, () => ({
