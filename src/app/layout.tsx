@@ -5,6 +5,7 @@ import GlobalStyle from "@/styles/GlobalStyle";
 import styled from "@emotion/styled";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import AuthGuard from "@/components/layout/AuthGuard";
+import { Suspense } from "react";
 
 const queryClient = new QueryClient();
 
@@ -20,7 +21,9 @@ export default function RootLayout({
         <body>
           <AuthGuard>
             <Wrapper id="layoutContainer">
-              <NProgressProvider />
+              <Suspense fallback={null}>
+                <NProgressProvider />
+              </Suspense>
               {children}
               <BottomBar />
             </Wrapper>

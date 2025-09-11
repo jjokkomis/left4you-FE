@@ -1,5 +1,6 @@
 'use client';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState, useImperativeHandle, forwardRef } from "react";
 import type { KakaoMapHandle, MapProps } from "@/types/types";
 
@@ -10,6 +11,17 @@ const KakaoMap = forwardRef<KakaoMapHandle, MapProps & { height?: string; tourIt
     const marker = useRef<kakao.maps.Marker | null>(null);
     const geocoder = useRef<kakao.maps.services.Geocoder | null>(null);
     const tourMarkers = useRef<kakao.maps.Marker[]>([]);
+// 전역 kakao 선언 (타입 안전성보다 빌드 통과 우선)
+declare global {
+  interface Window { kakao: any }
+}
+
+const KakaoMap = forwardRef<KakaoMapHandle, MapProps & { height?: string }>(
+  ({ onSelectLocation, center, height = "400px" }, ref) => {
+    const mapRef = useRef<HTMLDivElement>(null);
+    const mapInstance = useRef<any | null>(null);
+    const marker = useRef<any | null>(null);
+    const geocoder = useRef<any | null>(null);
 
     const [initialCenter, setInitialCenter] = useState<{ lat: number; lng: number } | null>(null);
 
@@ -36,14 +48,14 @@ const KakaoMap = forwardRef<KakaoMapHandle, MapProps & { height?: string; tourIt
         const options = {
           center: new kakao.maps.LatLng(initialCenter.lat, initialCenter.lng),
           level: 3,
-        };
+        } as const;
 
         mapInstance.current = new kakao.maps.Map(mapRef.current, options);
         marker.current = new kakao.maps.Marker({ position: options.center });
         marker.current.setMap(mapInstance.current);
 
         // 지도 클릭 시 위치 선택
-        kakao.maps.event.addListener(mapInstance.current, "click", (mouseEvent: kakao.maps.event.MouseEvent) => {
+        kakao.maps.event.addListener(mapInstance.current, "click", (mouseEvent: any) => {
           const latlng = mouseEvent.latLng;
           const lat = latlng.getLat();
           const lng = latlng.getLng();
@@ -122,10 +134,10 @@ const KakaoMap = forwardRef<KakaoMapHandle, MapProps & { height?: string; tourIt
         if (!geocoder.current || !mapInstance.current || !marker.current) return;
 
         geocoder.current.addressSearch(address, (result: any, status: string) => {
-          if (status === window.kakao.maps.services.Status.OK) {
+          if (status === (window as any).kakao.maps.services.Status.OK) {
             const lat = parseFloat(result[0].y);
             const lng = parseFloat(result[0].x);
-            const moveLatLng = new window.kakao.maps.LatLng(lat, lng);
+            const moveLatLng = new (window as any).kakao.maps.LatLng(lat, lng);
             mapInstance.current.setCenter(moveLatLng);
             marker.current.setPosition(moveLatLng);
             onSelectLocation(lat, lng, address);
@@ -135,13 +147,13 @@ const KakaoMap = forwardRef<KakaoMapHandle, MapProps & { height?: string; tourIt
       moveToLatLng: (lat: number, lng: number) => {
         if (!mapInstance.current || !marker.current) return;
 
-        const moveLatLng = new window.kakao.maps.LatLng(lat, lng);
+        const moveLatLng = new (window as any).kakao.maps.LatLng(lat, lng);
         mapInstance.current.setCenter(moveLatLng);
         marker.current.setPosition(moveLatLng);
 
         if (geocoder.current) {
           geocoder.current.coord2Address(lng, lat, (result: any, status: string) => {
-            if (status === window.kakao.maps.services.Status.OK) {
+            if (status === (window as any).kakao.maps.services.Status.OK) {
               const address = result[0].address.address_name;
               onSelectLocation(lat, lng, address);
             }

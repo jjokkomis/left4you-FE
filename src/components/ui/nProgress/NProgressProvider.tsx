@@ -17,11 +17,18 @@ export default function NProgressProvider() {
   })
 
   useEffect(() => {
-    const originalPush = router.push;
-    router.push = (href, opts) => {
+    type RouterPush = typeof router.push;
+    const originalPush: RouterPush = router.push;
+
+    const newPush: RouterPush = (href, opts) => {
       NProgress.start();
-      // @ts-ignore
       return originalPush(href, opts);
+    };
+
+    (router as unknown as { push: RouterPush }).push = newPush;
+
+    return () => {
+      (router as unknown as { push: RouterPush }).push = originalPush;
     };
   }, [router]);
 

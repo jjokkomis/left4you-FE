@@ -12,9 +12,11 @@ export default function Step2() {
         return <S.Loading>에러 발생 또는 코스 없음</S.Loading>;
 
     const course = courseList?.[0];
-    const places = course?.places ?? [];
-    const firstPlace = places[0] ?? { latitude: course?.latitude ?? 0, longitude: course?.longitude ?? 0 };
-    const coord = { lat: firstPlace.latitude, lng: firstPlace.longitude };
+    const places = (course?.places ?? []) as Array<{ latitude?: number; longitude?: number; place_name?: string }>;
+    const fallbackLat = typeof course?.latitude === "number" ? course.latitude : 0;
+    const fallbackLng = typeof course?.longitude === "number" ? course.longitude : 0;
+    const firstPlace = places[0] ?? { latitude: fallbackLat, longitude: fallbackLng };
+    const coord = { lat: Number(firstPlace.latitude ?? fallbackLat), lng: Number(firstPlace.longitude ?? fallbackLng) } as { lat: number; lng: number };
 
     return (
         <S.Container>
@@ -26,14 +28,14 @@ export default function Step2() {
                 </S.Pack>
             </S.Wrapper>
 
-            <KakaoMap center={coord} onSelectLocation={() => {}} />
+            <KakaoMap center={coord} onSelectLocation={() => { }} />
 
             <S.Group>
                 {places.length > 0 ? (
                     places.map((place, index) => (
                         <S.Course key={index}>
                             위치 {String.fromCharCode(65 + index)} (
-                            {(place.latitude ?? 0).toFixed(4)}, {(place.longitude ?? 0).toFixed(4)}) -{" "}
+                            {Number(place.latitude ?? fallbackLat).toFixed(4)}, {Number(place.longitude ?? fallbackLng).toFixed(4)}) -{" "}
                             {place.place_name || "이름 없음"}
                         </S.Course>
                     ))

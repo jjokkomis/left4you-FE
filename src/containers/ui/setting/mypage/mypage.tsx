@@ -51,7 +51,7 @@ export default function Setting() {
         {gifts.length > 0 ? (
           gifts.map((gift) => (
             <S.Box
-              key={gift.gift_id}
+              key={gift.id}
               onClick={() => router.push(`/review/${gift.course_id}`)}
             >
               <S.CourseName>{gift.course_name}</S.CourseName>

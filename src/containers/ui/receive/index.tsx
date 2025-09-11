@@ -56,11 +56,11 @@ export default function ReceiveContainer() {
   }
 
   if (data) {
-    const periods = ['오전','오후','저녁'] as const;
+    const periods = ['오전', '오후', '저녁'] as const;
     return (
       <S.Wrapper>
         <h2>선물받은 나의 코스</h2>
-        <KakaoMap height="150px" />
+        <KakaoMap height="150px" onSelectLocation={() => { }} />
         <S.DayFlow>
           <S.FlowTitle>{data.name}</S.FlowTitle>
           {data.courses.map((c, idx) => (
