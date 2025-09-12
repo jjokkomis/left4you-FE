@@ -8,6 +8,36 @@ import { jwtDecode } from "jwt-decode";
 import type { JwtPayload } from "@/types/auth";
 import useTourItems from "@/hooks/useTourItems";
 
+async function fetchTourItem() {
+    const TOUR_API_KEY = process.env.NEXT_PUBLIC_TOUR_API_KEY;
+    const url = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList";
+
+    const params = new URLSearchParams({
+        ServiceKey: TOUR_API_KEY || "",
+        MobileOS: "ETC",
+        MobileApp: "GiftTrip",
+        _type: "json",
+        areaCode: "8",
+        sigunguCode: "1",
+        contentTypeId: "12",
+        numOfRows: "1",
+    });
+
+    try {
+        const resp = await fetch(`${url}?${params.toString()}`);
+        if (!resp.ok) throw new Error("Tour API 요청 실패");
+
+        const data = await resp.json();
+        const tourItem = data?.response?.body?.items?.item ?? {};
+
+        console.log("반환 데이터:", tourItem);
+        return tourItem;
+    } catch (error) {
+        console.error( error);
+        return {};
+    }
+}
+
 export default function useCourse(courseId?: number) {
     const [courseName, setCourseName] = useState("");
     const [selected, setSelected] = useState<"A" | "B">("A");
@@ -39,6 +69,7 @@ export default function useCourse(courseId?: number) {
     const userId = user?.id ?? decodedUserId;
 
     const { data: gifts } = useQuery<CourseGift[], Error>({
+    const { data: gifts, isLoading: isGiftsLoading } = useQuery<CourseGift[], Error>({
         queryKey: ["myGifts"],
         queryFn: async () => {
             const res = await getMyGifts();
@@ -119,6 +150,16 @@ export default function useCourse(courseId?: number) {
     const createMutation = useMutation({
         mutationFn: async (data: { maker_id: number; name: string; content: string; rating: number; place_name: string; latitude: number; longitude: number }) => {
             return createCourse({ ...data, content: JSON.stringify(tourItems ?? []) });
+
+            const tourItem = await fetchTourItem();
+            return createCourse({
+                ...data,
+                content: JSON.stringify(tourItem),
+            });
+        },
+        onSuccess: () => {
+            alert("코스를 등록하였습니다");
+            refetch();
         },
         onSuccess: () => { alert("코스를 등록하였습니다"); refetch(); },
     });
