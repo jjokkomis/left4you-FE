@@ -44,7 +44,6 @@ export default function useCourse(courseId?: number) {
         A: { address: "", coord: null },
         B: { address: "", coord: null }
     });
-    const [receivedCourses, setReceivedCourses] = useState<CourseGift[]>([]);
     const [reviewTitle, setReviewTitle] = useState("");
     const [reviewBody, setReviewBody] = useState("");
     const [rating, setRating] = useState<number>(0);
@@ -76,17 +75,15 @@ export default function useCourse(courseId?: number) {
         enabled: !!token,
     });
 
-    useEffect(() => {
-        if (Array.isArray(gifts)) setReceivedCourses(gifts);
-    }, [gifts]);
-
     const { data, isLoading, error, refetch } = useQuery({
         queryKey: ["courseList", userId],
         queryFn: () => (userId ? getCourseList(userId) : Promise.resolve([])),
         enabled: !!userId,
         staleTime: 0,
     });
-    const courseList = Array.isArray(data) ? data : data?.courses ?? [];
+    const courseList = useMemo(() => 
+        Array.isArray(data) ? data : data?.courses ?? []
+    , [data]);
 
     const { data: courseDetail, isLoading: isDetailLoading } = useQuery({
         queryKey: ["courseDetail", courseId, userId],
@@ -116,7 +113,7 @@ export default function useCourse(courseId?: number) {
         } else if (courseDetail?.course && rating === 0) {
             setRating(courseDetail.course.score ?? 0);
         }
-    }, [latestReview, courseDetail]);
+    }, [latestReview, courseDetail, rating]);
 
     const createMutation = useMutation({
         mutationFn: async (data: { maker_id: number; name: string; content: string; rating: number; place_name: string; latitude: number; longitude: number }) => {
@@ -154,7 +151,7 @@ export default function useCourse(courseId?: number) {
             body: reviewBody,
             score: rating,
         });
-    }, [reviewTitle, reviewBody, rating, addReviewMutation, userId, courseId]);
+    }, [reviewTitle, reviewBody, rating, addReviewMutation, userId]);
 
     const handleSelectLocation = useCallback(
         (lat: number, lng: number, address: string) =>

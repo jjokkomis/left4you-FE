@@ -2,11 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import * as S from "./style";
 
 export default function LoginContainer() {
-  const router = useRouter();
   const kakaoLoginUrl = `${process.env.NEXT_PUBLIC_API_URL}/auth/kakao/login`;
   const [showLogin, setShowLogin] = useState(false);
 

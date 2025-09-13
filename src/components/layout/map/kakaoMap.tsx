@@ -5,11 +5,29 @@ import type { KakaoMapHandle, MapProps } from "@/types/types";
 import useTourItems from "@/hooks/useTourItems";
 
 declare global {
-  interface Window { kakao: any }
+  interface Window { 
+    kakao: {
+      maps: {
+        load: (callback: () => void) => void;
+        LatLng: new (lat: number, lng: number) => any;
+        Map: new (container: HTMLElement, options: any) => any;
+        Marker: new (options: any) => any;
+        CustomOverlay: new (options: any) => any;
+        InfoWindow: new (options: any) => any;
+        event: {
+          addListener: (target: any, type: string, handler: (event: any) => void) => void;
+        };
+        services: {
+          Status: { OK: string };
+          Geocoder: new () => any;
+        };
+      };
+    }
+  }
 }
 
 const KakaoMap = forwardRef<KakaoMapHandle, MapProps & { height?: string }>(
-  ({ onSelectLocation, center, height = "400px" }, ref) => {
+  function KakaoMapComponent({ onSelectLocation, center, height = "400px" }, ref) {
     const mapRef = useRef<HTMLDivElement>(null);
     const mapInstance = useRef<any>(null);
     const marker = useRef<any>(null);
@@ -50,7 +68,7 @@ const KakaoMap = forwardRef<KakaoMapHandle, MapProps & { height?: string }>(
           level: 3,
         } as const;
 
-        mapInstance.current = new kakao.maps.Map(mapRef.current, options);
+        mapInstance.current = new kakao.maps.Map(mapRef.current!, options);
         marker.current = new kakao.maps.Marker({ position: options.center });
         marker.current.setMap(mapInstance.current);
 
@@ -58,12 +76,12 @@ const KakaoMap = forwardRef<KakaoMapHandle, MapProps & { height?: string }>(
         setCurrentMapCenter(initialCenter);
 
         // 지도 클릭 시 위치 선택
-        kakao.maps.event.addListener(mapInstance.current, "click", (mouseEvent: any) => {
+        kakao.maps.event.addListener(mapInstance.current, "click", (mouseEvent: { latLng: any }) => {
           const latlng = mouseEvent.latLng;
           const lat = latlng.getLat();
           const lng = latlng.getLng();
 
-          geocoder.current?.coord2Address(lng, lat, (result: any, status: string) => {
+          geocoder.current?.coord2Address(lng, lat, (result: any[], status: string) => {
             if (status === kakao.maps.services.Status.OK) {
               const address = result[0].address.address_name;
               marker.current?.setPosition(latlng);
@@ -73,7 +91,7 @@ const KakaoMap = forwardRef<KakaoMapHandle, MapProps & { height?: string }>(
         });
 
         // 초기 위치 주소 가져오기
-        geocoder.current?.coord2Address(initialCenter.lng, initialCenter.lat, (result: any, status: string) => {
+        geocoder.current?.coord2Address(initialCenter.lng, initialCenter.lat, (result: any[], status: string) => {
           if (status === kakao.maps.services.Status.OK) {
             const address = result[0].address.address_name;
             onSelectLocation(initialCenter.lat, initialCenter.lng, address);
@@ -107,7 +125,7 @@ const KakaoMap = forwardRef<KakaoMapHandle, MapProps & { height?: string }>(
 
       // 기존 오버레이 제거 - 가장 안전한 방법
       if (tourMarkers.current.length > 0) {
-        tourMarkers.current.forEach((overlay, index) => {
+        tourMarkers.current.forEach((overlay) => {
           if (overlay) {
             try {
               // 정보창 정리
@@ -117,7 +135,7 @@ const KakaoMap = forwardRef<KakaoMapHandle, MapProps & { height?: string }>(
               }
               // 지도에서 제거
               overlay.setMap(null);
-            } catch (e) {
+            } catch {
               // 에러 무시하고 계속 진행
             }
           }
@@ -126,7 +144,16 @@ const KakaoMap = forwardRef<KakaoMapHandle, MapProps & { height?: string }>(
         tourMarkers.current.length = 0;
       }
 
-      tourItems.forEach((item: any) => {
+      tourItems.forEach((item: {
+        mapy?: string;
+        mapx?: string;
+        cat1?: string;
+        title: string;
+        addr1?: string;
+        tel?: string;
+        dist?: string;
+        firstimage?: string;
+      }) => {
         if (item.mapy && item.mapx) {
           const position = new window.kakao.maps.LatLng(parseFloat(item.mapy), parseFloat(item.mapx));
           
@@ -194,7 +221,7 @@ const KakaoMap = forwardRef<KakaoMapHandle, MapProps & { height?: string }>(
                 📞 ${item.tel}
               </div>` : ''}
               <div style="font-size: 11px; color: #999; margin-bottom: 8px;">
-                거리: ${Math.round(parseFloat(item.dist) || 0)}m
+                거리: ${Math.round(parseFloat(item.dist || '0') || 0)}m
               </div>
               ${item.firstimage ? `<div style="text-align: center; margin-bottom: 8px;">
                 <img src="${item.firstimage}" alt="${item.title}" 
@@ -218,9 +245,7 @@ const KakaoMap = forwardRef<KakaoMapHandle, MapProps & { height?: string }>(
           // DOM 요소에 직접 클릭 이벤트 추가
           const markerDiv = markerElement.querySelector('div');
           if (markerDiv) {
-            markerDiv.addEventListener('click', (e) => {
-              e.preventDefault();
-              e.stopPropagation();
+            markerDiv.addEventListener('click', () => {
               
               // 다른 정보창 닫기 - 단순하게
               tourMarkers.current.forEach((overlay) => {
@@ -242,7 +267,8 @@ const KakaoMap = forwardRef<KakaoMapHandle, MapProps & { height?: string }>(
     useEffect(() => {
       return () => {
         // 모든 오버레이 정리 - 단순하게
-        tourMarkers.current.forEach((overlay) => {
+        const markersToClean = tourMarkers.current;
+        markersToClean.forEach((overlay) => {
           if (overlay) {
             if (overlay.infoWindow) {
               overlay.infoWindow.close();
@@ -250,7 +276,7 @@ const KakaoMap = forwardRef<KakaoMapHandle, MapProps & { height?: string }>(
             overlay.setMap(null);
           }
         });
-        tourMarkers.current.length = 0;
+        tourMarkers.current = [];
       };
     }, []);
 
@@ -259,7 +285,7 @@ const KakaoMap = forwardRef<KakaoMapHandle, MapProps & { height?: string }>(
       moveToAddress: (address: string) => {
         if (!geocoder.current || !mapInstance.current || !marker.current) return;
 
-        geocoder.current.addressSearch(address, (result: any, status: string) => {
+        geocoder.current.addressSearch(address, (result: any[], status: string) => {
           if (status === window.kakao.maps.services.Status.OK) {
             const lat = parseFloat(result[0].y);
             const lng = parseFloat(result[0].x);
@@ -278,7 +304,7 @@ const KakaoMap = forwardRef<KakaoMapHandle, MapProps & { height?: string }>(
         marker.current.setPosition(moveLatLng);
 
         if (geocoder.current) {
-          geocoder.current.coord2Address(lng, lat, (result: any, status: string) => {
+          geocoder.current.coord2Address(lng, lat, (result: any[], status: string) => {
             if (status === window.kakao.maps.services.Status.OK) {
               const address = result[0].address.address_name;
               onSelectLocation(lat, lng, address);
