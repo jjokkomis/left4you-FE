@@ -26,7 +26,7 @@ export async function getTourItems(lat: number, lng: number, radius = 5000): Pro
             throw new Error('Tour API key가 설정되지 않았습니다.');
         }
 
-        const url = `http://apis.data.go.kr/B551011/KorService2/locationBasedList2?serviceKey=${serviceKey}&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=TestApp&_type=json&mapX=${lng}&mapY=${lat}&radius=${radius}`;
+        const url = `https://apis.data.go.kr/B551011/KorService2/locationBasedList2?serviceKey=${serviceKey}&numOfRows=10&pageNo=1&MobileOS=ETC&MobileApp=TestApp&_type=json&mapX=${lng}&mapY=${lat}&radius=${radius}`;
 
         const response = await fetch(url);
         

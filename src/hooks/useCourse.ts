@@ -9,10 +9,10 @@ import type { JwtPayload } from "@/types/auth";
 
 async function fetchTourItem() {
     const TOUR_API_KEY = process.env.NEXT_PUBLIC_TOUR_API_KEY;
-    const url = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList";
+    const url = "https://apis.data.go.kr/B551011/KorService2/areaBasedList2";
 
     const params = new URLSearchParams({
-        ServiceKey: TOUR_API_KEY || "",
+        serviceKey: TOUR_API_KEY || "",
         MobileOS: "ETC",
         MobileApp: "GiftTrip",
         _type: "json",
