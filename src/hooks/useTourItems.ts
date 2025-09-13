@@ -1,50 +1,29 @@
-import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { getTourItems } from "@/services/tour";
 
 interface TourItem {
     contentid: string;
     title: string;
+    addr1?: string;
+    mapx?: string;
+    mapy?: string;
+    firstimage?: string;
+    tel?: string;
 }
 
 export default function useTourItems(lat: number | null, lng: number | null, radius = 5000) {
-    const [items, setItems] = useState<TourItem[]>([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const { data: items = [], isLoading: loading, error, refetch } = useQuery({
+        queryKey: ["tourItems", lat, lng, radius],
+        queryFn: () => getTourItems(lat!, lng!, radius),
+        enabled: lat !== null && lng !== null,
+        staleTime: 5 * 60 * 1000, // 5분간 캐시
+        retry: 1,
+    });
 
-    useEffect(() => {
-        if (lat === null || lng === null) return;
-
-        const controller = new AbortController();
-        const signal = controller.signal;
-
-        const timer = setTimeout(async () => {
-            setLoading(true);
-            setError(null);
-            try {
-                const url = `/api/tour?mapX=${lng}&mapY=${lat}&radius=${radius}`;
-                const response = await fetch(url, { signal });
-
-                if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
-
-                const data = await response.json();
-                if (data.error) throw new Error(data.error);
-
-                const items = data.response?.body?.items?.item ?? [];
-                setItems(items);
-            } catch (err: any) {
-                if (err.name === "AbortError") return;
-                console.error("관광지 API 호출 에러:", err);
-                setError(err.message);
-                setItems([]);
-            } finally {
-                setLoading(false);
-            }
-        }, 500);
-
-        return () => {
-            clearTimeout(timer);
-            controller.abort();
-        };
-    }, [lat, lng, radius]);
-
-    return { items, loading, error };
+    return { 
+        items, 
+        loading, 
+        error: error?.message || null,
+        refetch
+    };
 }

@@ -12,8 +12,7 @@ export default function Step1() {
         selected, setSelected,
         locations, handleSelectLocation,
         handleInput, mapRef,
-        inputRefs, handleSaveData,
-        tourItems
+        inputRefs, handleSaveData
     } = useCourseChoice();
 
     return (
@@ -29,8 +28,7 @@ export default function Step1() {
             <S.MapWrapper>
                 <KakaoMap 
                     onSelectLocation={handleSelectLocation} 
-                    ref={mapRef} 
-                    tourItems={tourItems} 
+                    ref={mapRef}
                 />
             </S.MapWrapper>
             <S.MyLocationGroup>
