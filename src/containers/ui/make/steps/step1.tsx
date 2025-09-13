@@ -7,7 +7,13 @@ import useCourseChoice from "@/hooks/useCourse";
 import Image from "next/image";
 
 export default function Step1() {
-    const { courseName, setCourseName, selected, setSelected, locations, handleSelectLocation, handleInput, mapRef, inputRefs, handleSaveData } = useCourseChoice();
+    const {
+        courseName, setCourseName,
+        selected, setSelected,
+        locations, handleSelectLocation,
+        handleInput, mapRef,
+        inputRefs, handleSaveData
+    } = useCourseChoice();
 
     return (
         <S.Container>
@@ -20,7 +26,10 @@ export default function Step1() {
                 />
             </S.Wrapper>
             <S.MapWrapper>
-                <KakaoMap onSelectLocation={handleSelectLocation} ref={mapRef} />
+                <KakaoMap 
+                    onSelectLocation={handleSelectLocation} 
+                    ref={mapRef}
+                />
             </S.MapWrapper>
             <S.MyLocationGroup>
                 <Image src="/assets/Barrow.svg" alt="화살표 아이콘" width={10} height={10} />
@@ -38,8 +47,10 @@ export default function Step1() {
                         ref={inputRefs[course as "A" | "B"]}
                     />
                 ))}
-                </S.Group>
-            <Btn onClick={handleSaveData}>위치등록</Btn>
+            </S.Group>
+            <S.ButtonGroup>
+                <Btn onClick={handleSaveData}>위치등록</Btn>
+            </S.ButtonGroup>
         </S.Container>
     );
 }
