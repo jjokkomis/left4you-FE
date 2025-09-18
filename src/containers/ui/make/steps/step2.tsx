@@ -24,7 +24,6 @@ export default function Step2() {
                 <S.Title>코스 미리보기</S.Title>
                 <S.Pack>
                     <S.PreviewTitle>{course?.name || "코스 이름 없음"}</S.PreviewTitle>
-                    <S.Name>익명</S.Name>
                 </S.Pack>
             </S.Wrapper>
 
