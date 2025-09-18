@@ -216,3 +216,57 @@ export const SectionDivider = styled.hr`
   background: #e9ecef;
   margin: 1rem 0 0;
 `;
+
+export const ButtonGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  margin-top: 1rem;
+`;
+
+export const ShareButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid #364155;
+  background-color: transparent;
+  color: #364155;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background-color: #f8f9fa;
+  }
+  
+  &:active {
+    transform: translateY(1px);
+  }
+`;
+
+export const RetryButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid #e9ecef;
+  background-color: #f8f9fa;
+  color: #6c757d;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background-color: #e9ecef;
+  }
+  
+  &:active {
+    transform: translateY(1px);
+  }
+`;
