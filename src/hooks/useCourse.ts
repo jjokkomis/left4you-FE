@@ -2,7 +2,7 @@ import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { KakaoMapHandle, LocationState, CourseGift } from "@/types/types";
-import { createCourse, getCourseList, getCourseById, addCourseReview, getAllReview, getLastReview, getMyGifts } from "@/services/course";
+import { createCourse, getCourseList, getCourseById, addCourseReview, getAllReview, getLastReview, getMyGifts, getCourse } from "@/services/course";
 import { useUserStore } from "@/store/useUserStore";
 import { jwtDecode } from "jwt-decode";
 import type { JwtPayload } from "@/types/auth";
@@ -32,7 +32,7 @@ async function fetchTourItem() {
         console.log("반환 데이터:", tourItem);
         return tourItem;
     } catch (error) {
-        console.error( error);
+        console.error(error);
         return {};
     }
 }
@@ -47,6 +47,9 @@ export default function useCourse(courseId?: number) {
     const [reviewTitle, setReviewTitle] = useState("");
     const [reviewBody, setReviewBody] = useState("");
     const [rating, setRating] = useState<number>(0);
+
+    const [courseData, setCourseData] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
 
     const mapRef = useRef<KakaoMapHandle | null>(null);
     const inputRefs = { A: useRef<HTMLInputElement>(null), B: useRef<HTMLInputElement>(null) };
@@ -102,6 +105,25 @@ export default function useCourse(courseId?: number) {
         queryFn: () => (courseId && userId ? getLastReview(courseId, userId) : Promise.resolve(null)),
         enabled: !!courseId && !!userId,
     });
+
+    useEffect(() => {
+        if (!courseId) return;
+
+        const fetchCourseData = async () => {
+            setLoading(true);
+            try {
+                const data = await getCourse(courseId);
+                setCourseData(data);
+            } catch (err) {
+                console.error("코스 불러오기 실패:", err);
+                setCourseData(null);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCourseData();
+    }, [courseId]);
 
     useEffect(() => {
         const latest = latestReview?.latestReview;
@@ -221,5 +243,7 @@ export default function useCourse(courseId?: number) {
         isCourseAccessible,
         canAccessCurrentCourse,
         isAccessChecking: isLoading || isGiftsLoading,
+        courseData,
+        loading,
     };
 }

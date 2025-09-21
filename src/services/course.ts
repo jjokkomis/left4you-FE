@@ -46,5 +46,10 @@ export const getMyGifts = async () => {
     return response.data;
 };
 
+export const getCourse = async (course_id: number) => {
+    const response = await customAxios.get(`/course/receive/${course_id}`);
+    return response.data;
+};
+
 export { createCourse, getCourseList, getCourseReviewList, updateCourse };
 export default createCourse;
