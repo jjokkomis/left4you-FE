@@ -52,7 +52,7 @@ export default function Setting() {
           gifts.map((gift) => (
             <S.Box
               key={gift.id}
-              onClick={() => router.push(`/review/${gift.course_id}`)}
+              onClick={() => router.push(`/receive/${gift.course_id}`)}
             >
               <S.CourseName>{gift.course_name}</S.CourseName>
             </S.Box>
