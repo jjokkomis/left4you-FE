@@ -48,19 +48,18 @@ export default function BottomBar() {
 const Wrapper = styled.div`
   position: fixed;
   bottom: 0;
-  width: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(100%, 440px);
+  max-width: 440px;
   display: flex;
   justify-content: space-around;
   align-items: center;
   padding: 1.2rem 0;
   background-color: #fff;
-
-  @media screen and (min-width: 500px) {
-    width: 26%;
-  }
 `;
 
-const IconWrapper = styled.button<{ isActive: boolean }>`
+const IconWrapper = styled.button<{ isActive: boolean }>` 
   background: none;
   border: none;
   padding: 0;
