@@ -124,3 +124,16 @@ export interface AddReviewRequest {
     created_at: string;
     author_id: number;
 }
+
+export type CoursePlace = {
+  id: number;
+  place: string;
+  location: string;
+  description: string;
+};
+
+export type CourseDatas = {
+  id: number;
+  name: string;
+  courses: CoursePlace[];
+};

@@ -35,8 +35,7 @@ export default function Setting() {
           courses.map((course: CourseReview) => (
             <S.Box
               key={course.id}
-              onClick={() =>
-                alert("내가 만든 코스는 리뷰를 작성할 수 없습니다.")
+               onClick={() => router.push(`/receive/${course.id}`)
               }
             >
               <S.CourseName>{course.name}</S.CourseName>
@@ -52,7 +51,7 @@ export default function Setting() {
           gifts.map((gift) => (
             <S.Box
               key={gift.id}
-              onClick={() => router.push(`/review/${gift.course_id}`)}
+              onClick={() => router.push(`/receive/${gift.course_id}`)}
             >
               <S.CourseName>{gift.course_name}</S.CourseName>
             </S.Box>

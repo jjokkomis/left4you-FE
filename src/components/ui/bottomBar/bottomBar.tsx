@@ -46,14 +46,20 @@ export default function BottomBar() {
 }
 
 const Wrapper = styled.div`
-  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(100%, 440px);
+  max-width: 440px;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 0.75rem 0;
+  padding: 1.2rem 0;
+  background-color: #fff;
 `;
 
-const IconWrapper = styled.button<{ isActive: boolean }>`
+const IconWrapper = styled.button<{ isActive: boolean }>` 
   background: none;
   border: none;
   padding: 0;
