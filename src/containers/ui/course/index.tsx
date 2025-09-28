@@ -66,7 +66,12 @@ export default function CourseDetailContainer() {
   }
 
   const course = courseDetail.course;
-  const places = course.places || [];
+  type PlaceType = {
+    place_name?: string;
+    latitude?: number;
+    longitude?: number;
+  };
+  const places: PlaceType[] = course.places || [];
 
   return (
     <S.Container>
@@ -104,11 +109,14 @@ export default function CourseDetailContainer() {
         {places.length > 0 && (
           <S.PlacesList>
             <S.PlacesTitle>코스 장소들</S.PlacesTitle>
-            {places.map((place: any, index: number) => (
+            {places.map((place: PlaceType, index: number) => (
               <S.PlaceItem key={index}>
                 <S.PlaceNumber>{String.fromCharCode(65 + index)}</S.PlaceNumber>
                 <S.PlaceInfo>
                   <S.PlaceName>{place.place_name || `장소 ${index + 1}`}</S.PlaceName>
+                  <S.PlaceCoords>
+                    {Number(place.latitude || 0).toFixed(4)}, {Number(place.longitude || 0).toFixed(4)}
+                  </S.PlaceCoords>
                 </S.PlaceInfo>
               </S.PlaceItem>
             ))}

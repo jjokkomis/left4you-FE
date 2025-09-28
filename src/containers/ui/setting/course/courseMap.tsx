@@ -2,14 +2,22 @@
 
 import { useParams, useRouter } from "next/navigation";
 import * as S from "./style";
+
 import KakaoMap from "@/components/layout/map/kakaoMap";
 import Btn from "@/components/ui/button/button";
 import useCourse from "@/hooks/useCourse";
 
+type CoursePeriod = {
+    id?: number;
+    location?: string;
+    place?: string;
+    description?: string;
+};
+
 export default function CourseDetailPage() {
     const router = useRouter();
     const params = useParams();
-    const courseId = params?.id ? Number(params.id) : null;
+    const courseId = params?.id ? Number(params.id) : undefined;
 
     const { courseData, loading } = useCourse(courseId);
 
@@ -24,7 +32,7 @@ export default function CourseDetailPage() {
             <h2>선물받은 나의 코스</h2>
             <KakaoMap height="150px" onSelectLocation={() => { }} />
 
-            {courseData.courses?.map((c, idx) => (
+            {courseData.courses?.map((c: CoursePeriod, idx: number) => (
                 <S.PeriodBlock key={c.id || `period-${idx}`}>
                     <S.PeriodHeading>{periods[idx]}</S.PeriodHeading>
                     <S.PlaceWrapper>
@@ -35,7 +43,7 @@ export default function CourseDetailPage() {
                             <span>{c.place}</span>
                         </S.PlaceHeaderBottom>
                         <S.PlaceDescription
-                            dangerouslySetInnerHTML={{ __html: c.description }}
+                            dangerouslySetInnerHTML={{ __html: c.description ?? "" }}
                         />
                     </S.PlaceWrapper>
                     {idx < (courseData.courses?.length ?? 0) - 1 && <S.SectionDivider />}

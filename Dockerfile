@@ -6,7 +6,7 @@ COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
 
 COPY . .
-RUN yarn build   # next.config.js 에 output: "standalone" 필요
+RUN yarn build
 
 # 2) Runner
 FROM node:20-alpine AS runner
