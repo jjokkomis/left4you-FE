@@ -137,3 +137,13 @@ export type CourseDatas = {
   name: string;
   courses: CoursePlace[];
 };
+
+export interface TourItem {
+    contentid: string;
+    title: string;
+    addr1?: string;
+    mapx?: string;
+    mapy?: string;
+    firstimage?: string;
+    tel?: string;
+}
