@@ -7,7 +7,7 @@ export const Container = styled.div`
     width: 100%;
     max-width: 400px;
     overflow-x: hidden;
-    height: auto;
+    height: 100vh;
 `;
 
 export const MapWrapper = styled.div`

@@ -20,5 +20,6 @@ const Container = styled.div`
     gap: 1rem;
     row-gap: 1.5rem;
     width: 100%;
+    height: 100vh;
     max-width: 400px;
 `;
