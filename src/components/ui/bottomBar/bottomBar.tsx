@@ -57,6 +57,11 @@ const Wrapper = styled.div`
   align-items: center;
   padding: 1.2rem 0;
   background-color: #fff;
+  /* 모바일 safe area 고려 */
+  padding-bottom: max(1.2rem, env(safe-area-inset-bottom));
+  /* 모바일에서 하단 고정 */
+  z-index: 1000;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
 `;
 
 const IconWrapper = styled.button<{ isActive: boolean }>` 

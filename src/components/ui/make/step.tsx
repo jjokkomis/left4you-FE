@@ -21,6 +21,16 @@ const Wrapper = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    /* sticky로 상단 고정 */
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 100;
+    padding: 1rem 0;
+    margin: -0.5rem -0.2rem 0; /* ContentArea 패딩 상쇄 */
+    padding-left: 0.2rem;
+    padding-right: 0.2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 `;
 
 const Btn = styled.button`

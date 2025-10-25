@@ -7,7 +7,9 @@ export const Container = styled.div`
     width: 100%;
     max-width: 400px;
     overflow-x: hidden;
-    height: 100vh;
+    /* height 제거하고 min-height 사용 */
+    min-height: auto;
+    padding-bottom: 3rem; /* 하단 여백 추가 */
 `;
 
 export const MapWrapper = styled.div`

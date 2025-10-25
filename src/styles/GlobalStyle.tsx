@@ -16,6 +16,26 @@ const GlobalStyle = () => (
           font-style: normal;
       }
 
+      /* 모바일 뷰포트 높이 처리 */
+      :root {
+        --vh: 1vh;
+      }
+
+      html {
+        /* 모바일 브라우저 주소창 고려한 실제 뷰포트 높이 */
+        height: 100%;
+        height: -webkit-fill-available;
+      }
+
+      body {
+        min-height: 100vh;
+        min-height: -webkit-fill-available;
+        /* 모바일에서 스크롤 바운스 방지 */
+        overscroll-behavior: none;
+        /* 모바일 터치 스크롤 개선 */
+        -webkit-overflow-scrolling: touch;
+      }
+
       html,
       body,
       * {
