@@ -113,6 +113,7 @@ export default function useCourse(courseId?: number) {
             setLoading(true);
             try {
                 const data = await getCourse(courseId);
+                console.log("getCourse 응답 데이터:", data);
                 setCourseData(data);
             } catch (err) {
                 console.error("코스 불러오기 실패:", err);

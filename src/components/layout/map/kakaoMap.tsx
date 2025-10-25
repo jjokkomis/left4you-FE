@@ -37,8 +37,13 @@ const KakaoMap = forwardRef<KakaoMapHandle, MapProps & { height?: string }>(
     const [initialCenter, setInitialCenter] = useState<{ lat: number; lng: number } | null>(null);
     const [currentMapCenter, setCurrentMapCenter] = useState<{ lat: number; lng: number } | null>(null);
 
-    // 현재 위치 기반 초기 중심
+    // center prop이 제공되면 우선 사용, 아니면 현재 위치 기반 초기 중심
     useEffect(() => {
+      if (center) {
+        setInitialCenter(center);
+        return;
+      }
+      
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (pos) => setInitialCenter({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
@@ -47,7 +52,7 @@ const KakaoMap = forwardRef<KakaoMapHandle, MapProps & { height?: string }>(
       } else {
         setInitialCenter({ lat: 33.450701, lng: 126.570667 });
       }
-    }, []);
+    }, [center]);
 
     // API로 관광지 가져오기 (현재 지도 중심 기준)
     const { items: tourItems, refetch: refetchTourItems } = useTourItems(
